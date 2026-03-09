@@ -1,17 +1,27 @@
 {
   "action": {
-    "default_icon": "public/dev-icon-32.png",
+    "default_icon": {
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    },
     "default_popup": "src/pages/popup/index.html"
   },
   "icons": {
-    "128": "public/dev-icon-128.png"
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
   },
   "web_accessible_resources": [
     {
       "resources": [
         "contentStyle.css",
-        "dev-icon-128.png",
-        "dev-icon-32.png"
+        "icon-128.png",
+        "icon-48.png",
+        "icon-32.png",
+        "icon-16.png"
       ],
       "matches": []
     }

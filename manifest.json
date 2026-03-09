@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "name in manifest.json",
+  "name": "claude-nexus",
+  "version": "0.0.1",
   "description": "description in manifest.json",
   "options_ui": {
     "page": "src/pages/options/index.html"
@@ -8,24 +9,25 @@
   "action": {
     "default_popup": "src/pages/popup/index.html",
     "default_icon": {
-      "32": "icon-32.png"
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
     }
   },
-  "chrome_url_overrides": {
-    "newtab": "src/pages/newtab/index.html"
-  },
   "icons": {
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
     "128": "icon-128.png"
   },
   "permissions": [
-    "activeTab"
+    "storage"
   ],
   "content_scripts": [
     {
       "matches": [
-        "http://*/*",
-        "https://*/*",
-        "<all_urls>"
+        "https://claude.ai/*"
       ],
       "js": [
         "src/pages/content/index.tsx"
@@ -35,13 +37,14 @@
       ]
     }
   ],
-  "devtools_page": "src/pages/devtools/index.html",
   "web_accessible_resources": [
     {
       "resources": [
         "contentStyle.css",
         "icon-128.png",
-        "icon-32.png"
+        "icon-48.png",
+        "icon-32.png",
+        "icon-16.png"
       ],
       "matches": []
     }

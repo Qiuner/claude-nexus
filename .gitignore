@@ -390,3 +390,6 @@ $RECYCLE.BIN/
 
 #generated manifest
 public/manifest.json
+
+CLAUDE.md
+.trae/*
