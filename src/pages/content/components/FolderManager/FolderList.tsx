@@ -17,7 +17,9 @@ type ThemeTokens = {
   panelBg: string;
   hoverBg: string;
   input: string;
-  dangerText: string;
+  icon: string;
+  iconDanger: string;
+  iconHoverBg: string;
 };
 
 type Props = {
@@ -29,7 +31,7 @@ type Props = {
   onEditingNameChange: (value: string) => void;
   onRenameStart: (folder: Folder) => void;
   onRenameCommit: (folderId: string) => void;
-  onDelete: (folderId: string) => void;
+  onDelete: (folderId: string, anchorRect: DOMRect) => void;
   onToggleExpanded: (folderId: string) => void;
   onDropConversationToFolder: (folderId: string, conversationId: string) => void;
 };
@@ -48,7 +50,7 @@ const FolderList = ({
   onDropConversationToFolder,
 }: Props) => {
   return (
-    <div className="mt-2 space-y-2">
+    <div className="mt-1 space-y-1">
       {folders.map((folder) => (
         <FolderItem
           key={folder.id}

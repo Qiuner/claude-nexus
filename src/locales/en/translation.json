@@ -14,6 +14,7 @@
     "createFolderAria": "Create folder",
     "cancelCreateAria": "Cancel creating folder",
     "deleteConfirm": "Delete this folder? Conversations inside will become unfiled.",
+    "deleteTitle": "Delete folder",
     "unfiledDropAria": "Drop here to remove from folder",
     "unfiledLabel": "Unfiled (drop here to remove)"
   },

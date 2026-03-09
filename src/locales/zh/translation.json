@@ -14,6 +14,7 @@
     "createFolderAria": "创建文件夹",
     "cancelCreateAria": "取消创建文件夹",
     "deleteConfirm": "确定要删除该文件夹吗？文件夹内对话将变为未归类。",
+    "deleteTitle": "删除文件夹",
     "unfiledDropAria": "拖拽到这里移出文件夹",
     "unfiledLabel": "未归类（拖拽到此移出）"
   },

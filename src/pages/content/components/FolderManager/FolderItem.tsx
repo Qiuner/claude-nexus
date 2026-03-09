@@ -6,6 +6,7 @@
 
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ChevronDown, ChevronRight, Pencil, Trash2 } from 'lucide-react';
 import type { Conversation } from '@src/types/conversation';
 import type { Folder } from '@src/types/folder';
 import { getConversationIdFromDragEvent } from '../../utils/dom';
@@ -19,7 +20,9 @@ type ThemeTokens = {
   panelBg: string;
   hoverBg: string;
   input: string;
-  dangerText: string;
+  icon: string;
+  iconDanger: string;
+  iconHoverBg: string;
 };
 
 type Props = {
@@ -31,7 +34,7 @@ type Props = {
   onEditingNameChange: (value: string) => void;
   onRenameStart: (folder: Folder) => void;
   onRenameCommit: (folderId: string) => void;
-  onDelete: (folderId: string) => void;
+  onDelete: (folderId: string, anchorRect: DOMRect) => void;
   onToggleExpanded: (folderId: string) => void;
   onDropConversationToFolder: (folderId: string, conversationId: string) => void;
 };
@@ -79,7 +82,7 @@ export default function FolderItem({
 
   return (
     <div
-      className={`rounded border ${theme.border} ${theme.panelBg}`}
+      className={`group rounded-md transition-all duration-150 ${theme.hoverBg}`}
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDrop}
       aria-label={t('folderItem.folderAria', { name: folder.name })}
@@ -87,11 +90,11 @@ export default function FolderItem({
       <div className="flex items-center gap-2 px-2 py-1">
         <button
           type="button"
-          className={`shrink-0 rounded px-1 py-0.5 text-[11px] ${theme.headerText} ${theme.hoverBg}`}
+          className={`shrink-0 rounded p-1 transition-all duration-150 ${theme.icon} ${theme.iconHoverBg}`}
           onClick={() => onToggleExpanded(folder.id)}
           aria-label={folder.isExpanded ? t('folderItem.collapse') : t('folderItem.expand')}
         >
-          {folder.isExpanded ? '▾' : '▸'}
+          {folder.isExpanded ? <ChevronDown className="h-4 w-4" aria-hidden="true" /> : <ChevronRight className="h-4 w-4" aria-hidden="true" />}
         </button>
 
         {isEditing ? (
@@ -109,34 +112,38 @@ export default function FolderItem({
           />
         ) : (
           <div className="min-w-0 flex-1">
-            <div className={`truncate text-xs ${theme.rootText}`}>{folder.name}</div>
+            <div className={`truncate text-[13px] ${theme.rootText}`}>{folder.name}</div>
           </div>
         )}
 
         <div className={`shrink-0 text-[11px] ${theme.mutedText}`}>{count}</div>
 
-        <button
-          type="button"
-          className={`shrink-0 rounded px-2 py-1 text-[11px] ${theme.headerText} ${theme.hoverBg}`}
-          onClick={() => onRenameStart(folder)}
-          aria-label={t('folderItem.renameAria')}
-        >
-          {t('common.rename')}
-        </button>
-        <button
-          type="button"
-          className={`shrink-0 rounded px-2 py-1 text-[11px] ${theme.dangerText} ${theme.hoverBg}`}
-          onClick={() => onDelete(folder.id)}
-          aria-label={t('folderItem.deleteAria')}
-        >
-          {t('common.delete')}
-        </button>
+        <div className="flex shrink-0 items-center gap-1 opacity-0 transition-all duration-150 group-hover:opacity-100">
+          <button
+            type="button"
+            className={`rounded p-1 transition-all duration-150 ${theme.icon} ${theme.iconHoverBg}`}
+            onClick={() => onRenameStart(folder)}
+            aria-label={t('folderItem.renameAria')}
+            title={t('common.rename')}
+          >
+            <Pencil className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className={`rounded p-1 transition-all duration-150 ${theme.iconDanger} ${theme.iconHoverBg}`}
+            onClick={(e) => onDelete(folder.id, e.currentTarget.getBoundingClientRect())}
+            aria-label={t('folderItem.deleteAria')}
+            title={t('common.delete')}
+          >
+            <Trash2 className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
       </div>
 
       {folder.isExpanded ? (
         <div className="px-1 pb-1">
           {folder.conversationIds.length === 0 ? (
-            <div className={`px-2 py-1 text-[11px] ${theme.subtleText}`}>{t('folderItem.dropHint')}</div>
+            <div className={`px-2 py-1 text-[10px] ${theme.subtleText}`}>{t('folderItem.dropHint')}</div>
           ) : (
             <div className="space-y-0.5">{folder.conversationIds.map(renderConversationLink)}</div>
           )}

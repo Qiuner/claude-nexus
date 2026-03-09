@@ -8,6 +8,7 @@ import type React from 'react';
 import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { Plus } from 'lucide-react';
 import type { Folder } from '@src/types/folder';
 import { useConversations } from '../../hooks/useConversations';
 import { useFolders } from '../../hooks/useFolders';
@@ -23,7 +24,9 @@ type ThemeTokens = {
   panelBg: string;
   hoverBg: string;
   input: string;
-  dangerText: string;
+  icon: string;
+  iconDanger: string;
+  iconHoverBg: string;
   menu: string;
   divider: string;
 };
@@ -36,10 +39,12 @@ const getThemeTokens = (isDarkTheme: boolean): ThemeTokens => {
       mutedText: 'text-zinc-400',
       subtleText: 'text-zinc-500',
       border: 'border-zinc-800',
-      panelBg: 'bg-zinc-950/30',
-      hoverBg: 'hover:bg-zinc-800/70',
+      panelBg: 'bg-transparent',
+      hoverBg: 'hover:bg-zinc-800/60',
       input: 'border-zinc-700 bg-zinc-900/60 text-zinc-100 placeholder:text-zinc-500 focus:ring-zinc-500',
-      dangerText: 'text-red-300',
+      icon: 'text-zinc-500 hover:text-zinc-200',
+      iconDanger: 'text-zinc-500 hover:text-red-300',
+      iconHoverBg: 'hover:bg-zinc-800/60',
       menu: 'border-zinc-700 bg-zinc-900/95 text-zinc-100',
       divider: 'bg-zinc-700/60',
     };
@@ -51,10 +56,12 @@ const getThemeTokens = (isDarkTheme: boolean): ThemeTokens => {
     mutedText: 'text-zinc-600',
     subtleText: 'text-zinc-500',
     border: 'border-zinc-200',
-    panelBg: 'bg-white/85',
-    hoverBg: 'hover:bg-zinc-100',
+    panelBg: 'bg-transparent',
+    hoverBg: 'hover:bg-zinc-100/80',
     input: 'border-zinc-300 bg-white text-zinc-900 placeholder:text-zinc-400 focus:ring-zinc-400',
-    dangerText: 'text-red-600',
+    icon: 'text-zinc-500 hover:text-zinc-900',
+    iconDanger: 'text-zinc-500 hover:text-red-600',
+    iconHoverBg: 'hover:bg-zinc-100/80',
     menu: 'border-zinc-200 bg-white text-zinc-900',
     divider: 'bg-zinc-200',
   };
@@ -84,11 +91,14 @@ export default function FolderManager() {
   });
 
   const theme = useMemo(() => getThemeTokens(isDarkTheme), [isDarkTheme]);
+  const deletePopoverWidth = 320;
+  const deletePopoverHeight = 168;
 
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
+  const [pendingDelete, setPendingDelete] = useState<{ folderId: string; anchorRect: DOMRect } | null>(null);
 
   const handleCreateFolder = async () => {
     await addFolder(newFolderName);
@@ -109,10 +119,18 @@ export default function FolderManager() {
     })();
   };
 
-  const handleDeleteFolder = (folderId: string) => {
-    const ok = window.confirm(t('folders.deleteConfirm'));
-    if (!ok) return;
-    void removeFolder(folderId);
+  const handleDeleteFolder = (folderId: string, anchorRect: DOMRect) => {
+    setPendingDelete({ folderId, anchorRect });
+  };
+
+  const confirmDelete = () => {
+    if (!pendingDelete) return;
+    void removeFolder(pendingDelete.folderId);
+    setPendingDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setPendingDelete(null);
   };
 
   const handleUnfiledDrop = (e: React.DragEvent) => {
@@ -131,19 +149,20 @@ export default function FolderManager() {
   if (!portalContainer) return null;
 
   return createPortal(
-    <div className={`text-xs ${theme.rootText}`}>
+    <div className={`text-[12px] leading-4 ${theme.rootText}`}>
       <div className="flex items-center justify-between gap-2">
-        <div className={`text-[11px] font-medium ${theme.headerText}`}>{t('folders.title')}</div>
+        <div className={`text-xs font-medium ${theme.headerText}`}>{t('folders.title')}</div>
         <button
           type="button"
-          className={`rounded px-2 py-1 text-[11px] ${theme.rootText} ${theme.hoverBg}`}
+          className={`rounded p-1 transition-all duration-150 ${theme.icon} ${theme.iconHoverBg}`}
           onClick={() => {
             setIsCreatingFolder((v) => !v);
             setNewFolderName('');
           }}
           aria-label={t('folders.newFolderAria')}
+          title={t('folders.newFolderAria')}
         >
-          {t('folders.newButton')}
+          <Plus className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
 
@@ -184,15 +203,6 @@ export default function FolderManager() {
       ) : null}
 
       <div className="mt-2">
-        <div
-          className={`rounded border px-2 py-1 text-[11px] ${theme.border} ${theme.panelBg} ${theme.mutedText}`}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleUnfiledDrop}
-          aria-label={t('folders.unfiledDropAria')}
-        >
-          {t('folders.unfiledLabel')}
-        </div>
-
         <FolderList
           folders={folders}
           theme={theme}
@@ -206,6 +216,15 @@ export default function FolderManager() {
           onToggleExpanded={(folderId) => void toggleExpanded(folderId)}
           onDropConversationToFolder={handleFolderDrop}
         />
+
+        <div
+          className={`rounded border border-dashed bg-transparent px-2 py-1 text-[10px] transition-all duration-150 ${theme.border} ${theme.subtleText} ${theme.hoverBg}`}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleUnfiledDrop}
+          aria-label={t('folders.unfiledDropAria')}
+        >
+          {t('folders.unfiledLabel')}
+        </div>
       </div>
 
       {contextMenu ? (
@@ -273,6 +292,57 @@ export default function FolderManager() {
           </div>
         </div>
       ) : null}
+
+      {pendingDelete
+        ? createPortal(
+            <div className="fixed inset-0 z-[2147483647]" onMouseDown={cancelDelete}>
+              <div
+                className={`fixed rounded-xl border p-4 pb-4 text-xs shadow-xl transition-all duration-150 ${theme.menu}`}
+                style={{
+                  width: deletePopoverWidth,
+                  left: Math.min(
+                    Math.max(8, pendingDelete.anchorRect.right - deletePopoverWidth),
+                    Math.max(8, window.innerWidth - 8 - deletePopoverWidth),
+                  ),
+                  top:
+                    pendingDelete.anchorRect.bottom + 8 + deletePopoverHeight <= window.innerHeight - 8
+                      ? pendingDelete.anchorRect.bottom + 8
+                      : Math.max(8, pendingDelete.anchorRect.top - 8 - deletePopoverHeight),
+                }}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="delete-folder-title"
+                onMouseDown={(e) => e.stopPropagation()}
+              >
+                <div id="delete-folder-title" className={`mb-2 text-[13px] font-medium ${theme.rootText}`}>
+                  {t('folders.deleteTitle')}
+                </div>
+                <div className={`mb-4 text-[12px] ${theme.mutedText}`}>{t('folders.deleteConfirm')}</div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    className={`rounded border px-3 py-1.5 text-[12px] font-medium transition-all duration-150 ${theme.border} ${theme.rootText} ${theme.hoverBg}`}
+                    onClick={cancelDelete}
+                  >
+                    {t('common.cancel')}
+                  </button>
+                  <button
+                    type="button"
+                    className={`rounded border px-3 py-1.5 text-[12px] font-medium transition-all duration-150 ${
+                      isDarkTheme
+                        ? 'border-red-900/60 text-red-300 hover:bg-red-900/30'
+                        : 'border-red-200 text-red-600 hover:bg-red-50'
+                    }`}
+                    onClick={confirmDelete}
+                  >
+                    {t('common.delete')}
+                  </button>
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>,
     portalContainer,
   );
