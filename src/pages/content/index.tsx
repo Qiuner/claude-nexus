@@ -8,6 +8,7 @@ import { createRoot } from 'react-dom/client';
 import { i18n, initI18n, LANGUAGE_CHANGE_MESSAGE_TYPE } from '@src/services/i18n';
 import './style.css';
 import FolderManager from './components/FolderManager';
+import Timeline from './components/Timeline';
 
 const mount = async () => {
   await initI18n();
@@ -27,7 +28,12 @@ const mount = async () => {
   const rootContainer = document.querySelector('#__root');
   if (!rootContainer) throw new Error("Can't find Content root element");
   const root = createRoot(rootContainer);
-  root.render(<FolderManager />);
+  root.render(
+    <>
+      <FolderManager />
+      <Timeline />
+    </>,
+  );
 };
 
 void mount();

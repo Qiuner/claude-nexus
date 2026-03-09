@@ -1,0 +1,194 @@
+/**
+ * Tracks claude.ai message nodes and provides timeline navigation state.
+ */
+
+import { useEffect, useMemo, useRef, useState } from 'react';
+
+type MessageType = 'user';
+
+type TimelineNode = {
+  id: string;
+  type: MessageType;
+  element: Element;
+  index: number;
+  text: string;
+};
+
+type TimelineApi = {
+  nodes: TimelineNode[];
+  activeIndex: number;
+  scrollToNode: (index: number) => void;
+};
+
+const SCROLL_OFFSET_PX = 80;
+const CHAT_RESYNC_DELAY_MS = 800;
+const CHAT_POLL_INTERVAL_MS = 500;
+
+const getChatId = (): string => window.location.pathname.split('/chat/')?.[1] ?? '';
+
+const findScrollContainer = (): HTMLElement | null => {
+  const el = document.querySelector('[data-autoscroll-container="true"]');
+  return el instanceof HTMLElement ? el : null;
+};
+
+const getMessageType = (wrapper: Element): MessageType | null => {
+  if (wrapper.querySelector('[data-testid="user-message"]')) return 'user';
+  return null;
+};
+
+const extractUserText = (wrapper: Element): string => {
+  const el = wrapper.querySelector('[data-testid="user-message"]');
+  const text = el?.textContent ?? '';
+  return text.replace(/\s+/g, ' ').trim();
+};
+
+const buildNodes = (scrollContainer: HTMLElement): TimelineNode[] => {
+  const wrappers = Array.from(scrollContainer.querySelectorAll('[data-test-render-count]'));
+  const nodes: TimelineNode[] = [];
+
+  for (const [index, wrapper] of wrappers.entries()) {
+    const type = getMessageType(wrapper);
+    if (!type) continue;
+    const text = extractUserText(wrapper);
+    const renderCount = wrapper.getAttribute('data-test-render-count') || '';
+    const id = renderCount ? `${renderCount}_${index}` : String(index);
+    nodes.push({ id, type, element: wrapper, index: nodes.length, text });
+  }
+
+  return nodes;
+};
+
+const computeActiveIndex = (nodes: TimelineNode[]): number => {
+  if (nodes.length === 0) return -1;
+  let active = -1;
+  for (let i = 0; i < nodes.length; i += 1) {
+    const top = nodes[i].element.getBoundingClientRect().top;
+    if (top < SCROLL_OFFSET_PX) active = i;
+  }
+  return Math.max(0, active);
+};
+
+export const useTimeline = (): TimelineApi => {
+  const [scrollContainer, setScrollContainer] = useState<HTMLElement | null>(null);
+  const [nodes, setNodes] = useState<TimelineNode[]>([]);
+  const nodesRef = useRef(nodes);
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  const resyncTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    nodesRef.current = nodes;
+  }, [nodes]);
+
+  const refresh = useMemo((): (() => void) => {
+    return () => {
+      const container = findScrollContainer();
+      setScrollContainer(container);
+      if (!container) return;
+      const nextNodes = buildNodes(container);
+      setNodes(nextNodes);
+      setActiveIndex(computeActiveIndex(nextNodes));
+    };
+  }, []);
+
+  useEffect(() => {
+    let currentChatId = getChatId();
+
+    const timer = window.setInterval(() => {
+      const newChatId = getChatId();
+      if (newChatId === currentChatId) return;
+      currentChatId = newChatId;
+
+      setNodes([]);
+      setActiveIndex(0);
+
+      if (resyncTimeoutRef.current) window.clearTimeout(resyncTimeoutRef.current);
+      resyncTimeoutRef.current = window.setTimeout(() => {
+        resyncTimeoutRef.current = null;
+        refresh();
+      }, CHAT_RESYNC_DELAY_MS);
+    }, CHAT_POLL_INTERVAL_MS);
+
+    return () => {
+      window.clearInterval(timer);
+      if (resyncTimeoutRef.current) window.clearTimeout(resyncTimeoutRef.current);
+    };
+  }, [refresh]);
+
+  useEffect(() => {
+    const initial = findScrollContainer();
+    if (initial) setScrollContainer(initial);
+
+    if (initial) return;
+
+    const mo = new MutationObserver(() => {
+      const next = findScrollContainer();
+      if (!next) return;
+      setScrollContainer(next);
+      mo.disconnect();
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => mo.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = scrollContainer;
+    if (!el) return;
+
+    let raf = 0;
+    const schedule = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        const nextNodes = buildNodes(el);
+        setNodes(nextNodes);
+        setActiveIndex(computeActiveIndex(nextNodes));
+      });
+    };
+
+    schedule();
+    const mo = new MutationObserver(schedule);
+    mo.observe(el, { childList: true, subtree: true });
+
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      mo.disconnect();
+    };
+  }, [scrollContainer]);
+
+  useEffect(() => {
+    const el = scrollContainer;
+    if (!el) return;
+
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        setActiveIndex(computeActiveIndex(nodesRef.current));
+      });
+    };
+
+    el.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, [scrollContainer]);
+
+  const scrollToNode = useMemo(() => {
+    return (index: number) => {
+      const el = scrollContainer;
+      const node = nodesRef.current[index];
+      if (!el || !node) return;
+
+      const containerRect = el.getBoundingClientRect();
+      const nodeRect = node.element.getBoundingClientRect();
+      const targetTop = nodeRect.top - containerRect.top + el.scrollTop - SCROLL_OFFSET_PX;
+      el.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    };
+  }, [scrollContainer]);
+
+  return { nodes, activeIndex, scrollToNode };
+};

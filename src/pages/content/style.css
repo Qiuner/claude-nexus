@@ -5,3 +5,11 @@
 .your-class {
     color: aliceblue;
 }
+
+[data-autoscroll-container="true"]::-webkit-scrollbar {
+  display: none;
+}
+
+[data-autoscroll-container="true"] {
+  scrollbar-width: none;
+}

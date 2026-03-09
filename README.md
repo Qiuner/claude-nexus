@@ -29,10 +29,10 @@ Drag and drop your chats into folders that make sense to you. Stop digging throu
 - **Easy management**: Rename, delete, and reorganize at any time
 - **Persistent storage**: Your folder structure is saved locally across sessions
 
-### 📍 Timeline Navigation _(coming soon)_
+### 📍 Timeline Navigation
 
 **Never get lost in a long conversation again.**
-Visual nodes let you see the structure of your chat at a glance and jump to any message instantly.
+Visual nodes let you see the structure of your chat at a glance and jump to any message instantly. Fixed on the right; click to jump and hover to preview messages.
 
 ### 💡 Prompt Library _(coming soon)_
 
