@@ -1,7 +1,6 @@
 <div align="center">
 <img src="public/icon-128.png" width="96" alt="claude-nexus logo" />
 
-
 # claude-nexus
 
 ### The missing power-up for Claude ✨
@@ -119,7 +118,7 @@ Inspired by [gemini-voyager](https://github.com/Nagi-ovo/gemini-voyager) — an 
 
 ## 📄 License
 
-MIT License © 2025
+MIT License © 2026
 
 <div align="center">
 Made with ❤️ for Claude users
