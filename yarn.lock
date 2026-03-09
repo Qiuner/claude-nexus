@@ -997,10 +997,10 @@
   resolved "https://registry.npmjs.org/@types/semver/-/semver-7.5.8.tgz"
   integrity sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==
 
-"@types/webextension-polyfill@^0.12.3":
-  version "0.12.3"
-  resolved "https://registry.yarnpkg.com/@types/webextension-polyfill/-/webextension-polyfill-0.12.3.tgz#a4ac3452b816e4bd646024007a886234e2f6293e"
-  integrity sha512-F58aDVSeN/MjUGazXo/cPsmR76EvqQhQ1v4x23hFjUX0cfAJYE+JBWwiOGW36/VJGGxoH74sVlRIF3z7SJCKyg==
+"@types/webextension-polyfill@^0.12.5":
+  version "0.12.5"
+  resolved "https://registry.yarnpkg.com/@types/webextension-polyfill/-/webextension-polyfill-0.12.5.tgz#1d0c54ce83628b97eb7c2e31ec97500122a489c5"
+  integrity sha512-uKSAv6LgcVdINmxXMKBuVIcg/2m5JZugoZO8x20g7j2bXJkPIl/lVGQcDlbV+aXAiTyXT2RA5U5mI4IGCDMQeg==
 
 "@typescript-eslint/eslint-plugin@^7.8.0":
   version "7.8.0"
