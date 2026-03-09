@@ -1,20 +1,17 @@
 /**
- * storage.ts
- * Purpose: Wraps chrome.storage.local folder read/write and legacy key migration (no React).
- * Created: 2026-03-09
+ * Wraps chrome.storage.local folder read/write for claude-nexus (no legacy migration).
  */
 
 import type { Folder } from '@src/types/folder';
 import { i18n } from '@src/services/i18n';
 
-export const STORAGE_KEY = 'claude_folio_folders';
-const LEGACY_STORAGE_KEY = 'folderStore';
+export const STORAGE_KEY = 'claude_nexus_folders';
 
 type StorageOpResult<T> = { ok: true; value: T | undefined } | { ok: false; error: string };
 
 const isDebugEnabled = () => {
   try {
-    return window.localStorage.getItem('claude_folio_debug') === '1';
+    return window.localStorage.getItem('claude_nexus_debug') === '1';
   } catch {
     return false;
   }
@@ -23,13 +20,13 @@ const isDebugEnabled = () => {
 const debugLog = (...args: unknown[]) => {
   if (!isDebugEnabled()) return;
   // eslint-disable-next-line no-console
-  console.log('[claude-folio][storage]', ...args);
+  console.log('[claude-nexus][storage]', ...args);
 };
 
 const debugWarn = (...args: unknown[]) => {
   if (!isDebugEnabled()) return;
   // eslint-disable-next-line no-console
-  console.warn('[claude-folio][storage]', ...args);
+  console.warn('[claude-nexus][storage]', ...args);
 };
 
 const isContextInvalidatedError = (message: string | undefined) =>
@@ -132,14 +129,7 @@ export const getFolders = async (): Promise<Folder[]> => {
 
   const current = await storageLocalGet<unknown>(STORAGE_KEY);
   if (current.ok && current.value !== undefined) return parseFoldersFromStorageValue(current.value);
-
-  const legacy = await storageLocalGet<unknown>(LEGACY_STORAGE_KEY);
-  const migrated = legacy.ok ? parseFoldersFromStorageValue(legacy.value) : [];
-  if (migrated.length > 0) {
-    await storageLocalSet(STORAGE_KEY, migrated);
-  }
-
-  return migrated;
+  return [];
 };
 
 export const saveFolders = async (folders: Folder[]): Promise<void> => {

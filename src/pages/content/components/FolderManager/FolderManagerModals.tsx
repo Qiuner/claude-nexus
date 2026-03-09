@@ -57,7 +57,7 @@ export function FolderManagerModals({
           <div
             className={`fixed min-w-[220px] rounded border p-1 text-xs shadow-xl ${theme.menu}`}
             style={{ left: contextMenu.x, top: contextMenu.y }}
-            data-claude-folio-context-menu="1"
+            data-claude-nexus-context-menu="1"
             role="menu"
             aria-label={t('menu.labelAria')}
             onMouseDown={(e) => e.stopPropagation()}
@@ -167,4 +167,3 @@ export function FolderManagerModals({
     </>
   );
 }
-

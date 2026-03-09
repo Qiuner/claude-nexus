@@ -44,7 +44,7 @@ export const scanConversations = (ul: HTMLUListElement): Conversation[] => {
 export const getConversationIdFromDragEvent = (e: DragEvent | React.DragEvent) => {
   const dt = e.dataTransfer;
   if (!dt) return null;
-  const custom = dt.getData('application/x-claude-folio-conversation');
+  const custom = dt.getData('application/x-claude-nexus-conversation');
   if (custom) return custom;
   const plain = dt.getData('text/plain');
   if (plain && plain.length >= 8) return plain;

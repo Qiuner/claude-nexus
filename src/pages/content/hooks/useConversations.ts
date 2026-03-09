@@ -8,20 +8,20 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Conversation } from '@src/types/conversation';
 import { estimateIsDarkBackground, extractConversationIdFromHref, findNavUl, scanConversations } from '@pages/content/utils/dom';
 
-const INJECTED_CONTAINER_ID = '__claude_folio_folder_manager__';
+const INJECTED_CONTAINER_ID = '__claude_nexus_folder_manager__';
 
 const hideConversationListItem = (li: HTMLLIElement) => {
-  if (li.dataset.claudeFolioHidden === '1') return;
-  li.dataset.claudeFolioHidden = '1';
-  li.dataset.claudeFolioPrevDisplay = li.style.display || '';
+  if (li.dataset.claudeNexusHidden === '1') return;
+  li.dataset.claudeNexusHidden = '1';
+  li.dataset.claudeNexusPrevDisplay = li.style.display || '';
   li.style.display = 'none';
 };
 
 const restoreConversationListItem = (li: HTMLLIElement) => {
-  if (li.dataset.claudeFolioHidden !== '1') return;
-  li.style.display = li.dataset.claudeFolioPrevDisplay || '';
-  delete li.dataset.claudeFolioHidden;
-  delete li.dataset.claudeFolioPrevDisplay;
+  if (li.dataset.claudeNexusHidden !== '1') return;
+  li.style.display = li.dataset.claudeNexusPrevDisplay || '';
+  delete li.dataset.claudeNexusHidden;
+  delete li.dataset.claudeNexusPrevDisplay;
 };
 
 const applyConversationVisibility = (ul: HTMLUListElement, hiddenIds: Set<string>) => {
@@ -184,7 +184,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
       const href = a.getAttribute('href') || '';
       const id = extractConversationIdFromHref(href);
       if (!id) return;
-      e.dataTransfer?.setData('application/x-claude-folio-conversation', id);
+      e.dataTransfer?.setData('application/x-claude-nexus-conversation', id);
       e.dataTransfer?.setData('text/plain', id);
       if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
     };
