@@ -5,6 +5,7 @@
  */
 
 import type { Folder } from '@src/types/folder';
+import { i18n } from '@src/services/i18n';
 
 export const STORAGE_KEY = 'claude_folio_folders';
 const LEGACY_STORAGE_KEY = 'folderStore';
@@ -57,7 +58,7 @@ export const parseFoldersFromStorageValue = (value: unknown): Folder[] => {
 
       return {
         id: folder.id,
-        name: sanitizeFolderName(folder.name) || '未命名文件夹',
+        name: sanitizeFolderName(folder.name) || i18n.t('storage.unnamedFolder'),
         conversationIds: dedupedConversationIds,
         isExpanded: typeof folder.isExpanded === 'boolean' ? folder.isExpanded : true,
       } satisfies Folder;
@@ -69,28 +70,28 @@ export const parseFoldersFromStorageValue = (value: unknown): Folder[] => {
 
 const storageLocalGet = <T,>(key: string): Promise<StorageOpResult<T>> => {
   return new Promise((resolve) => {
-    if (!chrome?.storage?.local) return resolve({ ok: false, error: 'chrome.storage.local 不可用' });
+    if (!chrome?.storage?.local) return resolve({ ok: false, error: i18n.t('storage.unavailable') });
     try {
       chrome.storage.local.get([key], (result) => {
         const err = chrome.runtime?.lastError;
         if (err) {
-          const errMessage = err.message ?? '未知错误';
-          debugWarn('storage.get 失败', key, errMessage);
+          const errMessage = err.message ?? i18n.t('storage.unknownError');
+          debugWarn('storage.get failed', key, errMessage);
           if (isContextInvalidatedError(errMessage)) {
-            debugWarn('检测到扩展上下文已失效：通常是扩展刚被重新加载/更新，刷新页面即可恢复');
+            debugWarn(i18n.t('storage.contextInvalidated'));
           }
           return resolve({ ok: false, error: errMessage });
         }
 
         const value = result?.[key] as T | undefined;
-        debugLog('storage.get 成功', key, value);
+        debugLog('storage.get ok', key, value);
         resolve({ ok: true, value });
       });
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
-      debugWarn('storage.get 异常', key, message);
+      debugWarn('storage.get exception', key, message);
       if (isContextInvalidatedError(message)) {
-        debugWarn('检测到扩展上下文已失效：通常是扩展刚被重新加载/更新，刷新页面即可恢复');
+        debugWarn(i18n.t('storage.contextInvalidated'));
       }
       resolve({ ok: false, error: message });
     }
@@ -99,27 +100,27 @@ const storageLocalGet = <T,>(key: string): Promise<StorageOpResult<T>> => {
 
 const storageLocalSet = (key: string, value: unknown): Promise<StorageOpResult<void>> => {
   return new Promise((resolve) => {
-    if (!chrome?.storage?.local) return resolve({ ok: false, error: 'chrome.storage.local 不可用' });
+    if (!chrome?.storage?.local) return resolve({ ok: false, error: i18n.t('storage.unavailable') });
     try {
       chrome.storage.local.set({ [key]: value }, () => {
         const err = chrome.runtime?.lastError;
         if (err) {
-          const errMessage = err.message ?? '未知错误';
-          debugWarn('storage.set 失败', key, errMessage);
+          const errMessage = err.message ?? i18n.t('storage.unknownError');
+          debugWarn('storage.set failed', key, errMessage);
           if (isContextInvalidatedError(errMessage)) {
-            debugWarn('检测到扩展上下文已失效：通常是扩展刚被重新加载/更新，刷新页面即可恢复');
+            debugWarn(i18n.t('storage.contextInvalidated'));
           }
           return resolve({ ok: false, error: errMessage });
         }
 
-        debugLog('storage.set 成功', key);
+        debugLog('storage.set ok', key);
         resolve({ ok: true, value: undefined });
       });
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
-      debugWarn('storage.set 异常', key, message);
+      debugWarn('storage.set exception', key, message);
       if (isContextInvalidatedError(message)) {
-        debugWarn('检测到扩展上下文已失效：通常是扩展刚被重新加载/更新，刷新页面即可恢复');
+        debugWarn(i18n.t('storage.contextInvalidated'));
       }
       resolve({ ok: false, error: message });
     }
@@ -147,7 +148,7 @@ export const saveFolders = async (folders: Folder[]): Promise<void> => {
   const setRes = await storageLocalSet(STORAGE_KEY, folders);
   if (!setRes.ok) return;
 
-  debugLog('storage.set 写入完成', STORAGE_KEY, { folderCount: folders.length });
+  debugLog('storage.set committed', STORAGE_KEY, { folderCount: folders.length });
   const echoed = await storageLocalGet<unknown>(STORAGE_KEY);
-  if (echoed.ok) debugLog('storage 回读', STORAGE_KEY, echoed.value);
+  if (echoed.ok) debugLog('storage readback', STORAGE_KEY, echoed.value);
 };

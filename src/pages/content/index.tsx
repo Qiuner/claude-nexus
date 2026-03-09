@@ -5,16 +5,29 @@
  */
 
 import { createRoot } from 'react-dom/client';
+import { i18n, initI18n, LANGUAGE_CHANGE_MESSAGE_TYPE } from '@src/services/i18n';
 import './style.css';
 import FolderManager from './components/FolderManager';
 
-const div = document.createElement('div');
-div.id = '__root';
-document.body.appendChild(div);
+const mount = async () => {
+  await initI18n();
 
-const rootContainer = document.querySelector('#__root');
-if (!rootContainer) throw new Error("Can't find Content root element");
-const root = createRoot(rootContainer);
-root.render(
-  <FolderManager />
-);
+  chrome.runtime.onMessage.addListener((message: unknown) => {
+    if (!message || typeof message !== 'object') return;
+    const payload = message as { type?: string; lang?: string };
+    if (payload.type !== LANGUAGE_CHANGE_MESSAGE_TYPE) return;
+    if (payload.lang !== 'en' && payload.lang !== 'zh') return;
+    void i18n.changeLanguage(payload.lang);
+  });
+
+  const div = document.createElement('div');
+  div.id = '__root';
+  document.body.appendChild(div);
+
+  const rootContainer = document.querySelector('#__root');
+  if (!rootContainer) throw new Error("Can't find Content root element");
+  const root = createRoot(rootContainer);
+  root.render(<FolderManager />);
+};
+
+void mount();

@@ -1,0 +1,55 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "create": "Create",
+    "delete": "Delete",
+    "rename": "Rename"
+  },
+  "folders": {
+    "title": "Folders",
+    "newFolderAria": "Create folder",
+    "newButton": "New",
+    "folderName": "Folder name",
+    "createFolderAria": "Create folder",
+    "cancelCreateAria": "Cancel creating folder",
+    "deleteConfirm": "Delete this folder? Conversations inside will become unfiled.",
+    "unfiledDropAria": "Drop here to remove from folder",
+    "unfiledLabel": "Unfiled (drop here to remove)"
+  },
+  "menu": {
+    "closeAria": "Close conversation actions menu",
+    "labelAria": "Conversation actions menu",
+    "escToCloseAria": "Press Esc to close menu",
+    "moveInto": "Move to folder",
+    "emptyFolders": "No folders yet",
+    "moveOut": "Remove from folder"
+  },
+  "folderItem": {
+    "folderAria": "Folder: {{name}}",
+    "collapse": "Collapse folder",
+    "expand": "Expand folder",
+    "renameAria": "Rename folder",
+    "deleteAria": "Delete folder",
+    "dropHint": "Drop conversations into this folder"
+  },
+  "conversation": {
+    "fallbackTitle": "Conversation {{id}}",
+    "openAria": "Open conversation: {{title}}",
+    "untitled": "Untitled conversation"
+  },
+  "storage": {
+    "unnamedFolder": "Untitled folder",
+    "unavailable": "chrome.storage.local is unavailable",
+    "unknownError": "Unknown error",
+    "contextInvalidated": "Extension context invalidated: the extension was reloaded/updated; refresh the page to recover"
+  },
+  "popup": {
+    "title": "Settings",
+    "language": "Language",
+    "languageZh": "中文",
+    "languageEn": "English",
+    "hint": "Language changes apply to the current claude.ai tab."
+  }
+}
+

@@ -23,7 +23,7 @@ export const extractConversationIdFromHref = (href: string) => {
 export const getConversationTitleFromAnchor = (a: HTMLAnchorElement) => {
   const span = a.querySelector('span.truncate');
   const text = (span?.textContent || a.textContent || '').trim();
-  return text || '未命名对话';
+  return text;
 };
 
 export const scanConversations = (ul: HTMLUListElement): Conversation[] => {

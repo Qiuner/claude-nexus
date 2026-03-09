@@ -7,6 +7,7 @@
 import type React from 'react';
 import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import type { Folder } from '@src/types/folder';
 import { useConversations } from '../../hooks/useConversations';
 import { useFolders } from '../../hooks/useFolders';
@@ -60,6 +61,7 @@ const getThemeTokens = (isDarkTheme: boolean): ThemeTokens => {
 };
 
 export default function FolderManager() {
+  const { t } = useTranslation();
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -108,7 +110,7 @@ export default function FolderManager() {
   };
 
   const handleDeleteFolder = (folderId: string) => {
-    const ok = window.confirm('确定要删除该文件夹吗？文件夹内对话将变为未归类。');
+    const ok = window.confirm(t('folders.deleteConfirm'));
     if (!ok) return;
     void removeFolder(folderId);
   };
@@ -131,7 +133,7 @@ export default function FolderManager() {
   return createPortal(
     <div className={`text-xs ${theme.rootText}`}>
       <div className="flex items-center justify-between gap-2">
-        <div className={`text-[11px] font-medium ${theme.headerText}`}>文件夹</div>
+        <div className={`text-[11px] font-medium ${theme.headerText}`}>{t('folders.title')}</div>
         <button
           type="button"
           className={`rounded px-2 py-1 text-[11px] ${theme.rootText} ${theme.hoverBg}`}
@@ -139,9 +141,9 @@ export default function FolderManager() {
             setIsCreatingFolder((v) => !v);
             setNewFolderName('');
           }}
-          aria-label="新建文件夹"
+          aria-label={t('folders.newFolderAria')}
         >
-          新建
+          {t('folders.newButton')}
         </button>
       </div>
 
@@ -151,8 +153,8 @@ export default function FolderManager() {
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
             className={`w-full rounded border px-2 py-1 text-xs focus:outline-none focus:ring-1 ${theme.input}`}
-            placeholder="文件夹名称"
-            aria-label="文件夹名称"
+            placeholder={t('folders.folderName')}
+            aria-label={t('folders.folderName')}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
               void handleCreateFolder();
@@ -163,9 +165,9 @@ export default function FolderManager() {
             type="button"
             className={`rounded px-2 py-1 text-[11px] ${theme.rootText} ${theme.hoverBg}`}
             onClick={() => void handleCreateFolder()}
-            aria-label="创建文件夹"
+            aria-label={t('folders.createFolderAria')}
           >
-            保存
+            {t('common.save')}
           </button>
           <button
             type="button"
@@ -174,9 +176,9 @@ export default function FolderManager() {
               setIsCreatingFolder(false);
               setNewFolderName('');
             }}
-            aria-label="取消创建文件夹"
+            aria-label={t('folders.cancelCreateAria')}
           >
-            取消
+            {t('common.cancel')}
           </button>
         </div>
       ) : null}
@@ -186,9 +188,9 @@ export default function FolderManager() {
           className={`rounded border px-2 py-1 text-[11px] ${theme.border} ${theme.panelBg} ${theme.mutedText}`}
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleUnfiledDrop}
-          aria-label="拖拽到这里移出文件夹"
+          aria-label={t('folders.unfiledDropAria')}
         >
-          未归类（拖拽到此移出）
+          {t('folders.unfiledLabel')}
         </div>
 
         <FolderList
@@ -210,14 +212,14 @@ export default function FolderManager() {
         <div
           className="fixed inset-0 z-[2147483647]"
           onMouseDown={handleCloseContextMenu}
-          aria-label="关闭对话操作菜单"
+          aria-label={t('menu.closeAria')}
         >
           <div
             className={`fixed min-w-[220px] rounded border p-1 text-xs shadow-xl ${theme.menu}`}
             style={{ left: contextMenu.x, top: contextMenu.y }}
             data-claude-folio-context-menu="1"
             role="menu"
-            aria-label="对话操作菜单"
+            aria-label={t('menu.labelAria')}
             onMouseDown={(e) => e.stopPropagation()}
           >
             <button
@@ -227,13 +229,13 @@ export default function FolderManager() {
               onKeyDown={(e) => {
                 if (e.key === 'Escape') handleCloseContextMenu();
               }}
-              aria-label="按 Esc 关闭菜单"
+              aria-label={t('menu.escToCloseAria')}
             />
 
-            <div className={`px-2 py-1 text-[11px] ${theme.mutedText}`}>移入文件夹</div>
+            <div className={`px-2 py-1 text-[11px] ${theme.mutedText}`}>{t('menu.moveInto')}</div>
             <div className="max-h-[240px] overflow-auto">
               {folders.length === 0 ? (
-                <div className={`px-2 py-1 text-[11px] ${theme.subtleText}`}>暂无文件夹</div>
+                <div className={`px-2 py-1 text-[11px] ${theme.subtleText}`}>{t('menu.emptyFolders')}</div>
               ) : (
                 folders.map((f) => (
                   <button
@@ -266,7 +268,7 @@ export default function FolderManager() {
               }}
               role="menuitem"
             >
-              移出文件夹
+              {t('menu.moveOut')}
             </button>
           </div>
         </div>

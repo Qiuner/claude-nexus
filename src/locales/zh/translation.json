@@ -1,0 +1,55 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "create": "创建",
+    "delete": "删除",
+    "rename": "重命名"
+  },
+  "folders": {
+    "title": "文件夹",
+    "newFolderAria": "新建文件夹",
+    "newButton": "新建",
+    "folderName": "文件夹名称",
+    "createFolderAria": "创建文件夹",
+    "cancelCreateAria": "取消创建文件夹",
+    "deleteConfirm": "确定要删除该文件夹吗？文件夹内对话将变为未归类。",
+    "unfiledDropAria": "拖拽到这里移出文件夹",
+    "unfiledLabel": "未归类（拖拽到此移出）"
+  },
+  "menu": {
+    "closeAria": "关闭对话操作菜单",
+    "labelAria": "对话操作菜单",
+    "escToCloseAria": "按 Esc 关闭菜单",
+    "moveInto": "移入文件夹",
+    "emptyFolders": "暂无文件夹",
+    "moveOut": "移出文件夹"
+  },
+  "folderItem": {
+    "folderAria": "文件夹：{{name}}",
+    "collapse": "折叠文件夹",
+    "expand": "展开文件夹",
+    "renameAria": "重命名文件夹",
+    "deleteAria": "删除文件夹",
+    "dropHint": "拖拽对话到此文件夹"
+  },
+  "conversation": {
+    "fallbackTitle": "对话 {{id}}",
+    "openAria": "打开对话：{{title}}",
+    "untitled": "未命名对话"
+  },
+  "storage": {
+    "unnamedFolder": "未命名文件夹",
+    "unavailable": "chrome.storage.local 不可用",
+    "unknownError": "未知错误",
+    "contextInvalidated": "检测到扩展上下文已失效：通常是扩展刚被重新加载/更新，刷新页面即可恢复"
+  },
+  "popup": {
+    "title": "设置",
+    "language": "语言",
+    "languageZh": "中文",
+    "languageEn": "English",
+    "hint": "语言切换会应用到当前打开的 claude.ai 页面。"
+  }
+}
+
