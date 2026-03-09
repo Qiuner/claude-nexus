@@ -1,7 +1,5 @@
 /**
- * FolderItem.tsx
- * Purpose: Renders a single folder row (title, expand/collapse, rename, delete, drop target, and conversation list).
- * Created: 2026-03-09
+ * Renders a single folder row and its conversation list (pure UI).
  */
 
 import type React from 'react';

@@ -1,7 +1,5 @@
 /**
- * FolderList.tsx
- * Purpose: Renders the folder list (UI composition only; no business state).
- * Created: 2026-03-09
+ * Renders the folder list (pure UI composition).
  */
 
 import type { Conversation } from '@src/types/conversation';
