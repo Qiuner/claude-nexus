@@ -53,6 +53,9 @@
     "languageEn": "English",
     "hint": "Language changes apply to the current claude.ai tab."
   },
+  "floatBall": {
+    "width": "Chat width"
+  },
   "widthControl": {
     "title": "Chat width",
     "valueLabel": "Width",

@@ -53,6 +53,9 @@
     "languageEn": "English",
     "hint": "语言切换会应用到当前打开的 claude.ai 页面。"
   },
+  "floatBall": {
+    "width": "对话宽度"
+  },
   "widthControl": {
     "title": "对话宽度",
     "valueLabel": "宽度",

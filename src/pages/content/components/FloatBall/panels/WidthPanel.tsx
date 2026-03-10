@@ -7,7 +7,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RotateCcw, X } from 'lucide-react';
-import { CHAT_WIDTH_RANGE, useWidthControl } from '../../hooks/useWidthControl';
+import { CHAT_WIDTH_RANGE, useWidthControl } from '../../../hooks/useWidthControl';
 
 type Props = {
   /** Where the panel should expand (relative to the ball). */
@@ -90,3 +90,4 @@ export default function WidthPanel({ side, onClose }: Props) {
     </div>
   );
 }
+
