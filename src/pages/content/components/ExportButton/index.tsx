@@ -118,7 +118,7 @@ const ExportButton = () => {
     <div ref={wrapperRef} className="relative">
       <button
         type="button"
-        className="inline-flex h-8 items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-3 text-[12px] text-[#374151] shadow-sm hover:bg-zinc-50 active:scale-[0.98]"
+        className="inline-flex h-8 items-center gap-2 whitespace-nowrap rounded-lg border border-[#e5e0d8] bg-white px-3 text-[12px] text-[#374151] shadow-sm hover:bg-zinc-50 active:scale-[0.98]"
         aria-label={t('export.buttonAria')}
         onClick={() => setOpen((v) => !v)}
       >
