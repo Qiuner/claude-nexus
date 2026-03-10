@@ -56,6 +56,20 @@
   "floatBall": {
     "width": "Chat width"
   },
+  "export": {
+    "title": "Export conversation",
+    "buttonLabel": "Export",
+    "buttonAria": "Open export menu",
+    "closeAria": "Close export menu",
+    "formatLabel": "Format",
+    "formatMarkdown": "Markdown",
+    "formatJson": "JSON",
+    "exportButton": "Export",
+    "statusExporting": "Exporting...",
+    "statusSuccess": "Exported {{count}} messages",
+    "statusFailed": "Export failed",
+    "statusFailedCount": "{{count}} failed"
+  },
   "widthControl": {
     "title": "Chat width",
     "valueLabel": "Width",

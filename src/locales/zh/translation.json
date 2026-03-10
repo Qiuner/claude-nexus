@@ -56,6 +56,20 @@
   "floatBall": {
     "width": "对话宽度"
   },
+  "export": {
+    "title": "导出对话",
+    "buttonLabel": "导出",
+    "buttonAria": "打开导出菜单",
+    "closeAria": "关闭导出菜单",
+    "formatLabel": "格式",
+    "formatMarkdown": "Markdown",
+    "formatJson": "JSON",
+    "exportButton": "导出",
+    "statusExporting": "导出中…",
+    "statusSuccess": "已导出 {{count}} 条消息",
+    "statusFailed": "导出失败",
+    "statusFailedCount": "{{count}} 条失败"
+  },
   "widthControl": {
     "title": "对话宽度",
     "valueLabel": "宽度",

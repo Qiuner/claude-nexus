@@ -10,6 +10,7 @@ import './style.css';
 import FolderManager from './components/FolderManager';
 import Timeline from './components/Timeline';
 import FloatBall from './components/FloatBall';
+import { initExportButtonInjection } from './components/ExportButton';
 
 const mount = async () => {
   await initI18n();
@@ -36,6 +37,8 @@ const mount = async () => {
       <FloatBall />
     </>,
   );
+
+  initExportButtonInjection();
 };
 
 void mount();
