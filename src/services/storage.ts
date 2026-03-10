@@ -4,8 +4,11 @@
  * Last updated: 2026-03-10
  */
 
+import type { Prompt } from '@src/types/prompt';
+
 export const CHAT_WIDTH_STORAGE_KEY = 'chatWidth';
 export const FLOAT_BALL_POSITION_STORAGE_KEY = 'floatBallPosition';
+export const PROMPT_LIBRARY_STORAGE_KEY = 'promptLibrary';
 
 const parseChatWidth = (value: unknown): number | undefined => {
   if (typeof value !== 'number' || Number.isNaN(value) || !Number.isFinite(value)) return undefined;
@@ -20,6 +23,23 @@ const parseFloatBallPosition = (value: unknown): FloatBallPosition | undefined =
   if (typeof v.x !== 'number' || Number.isNaN(v.x) || !Number.isFinite(v.x)) return undefined;
   if (typeof v.y !== 'number' || Number.isNaN(v.y) || !Number.isFinite(v.y)) return undefined;
   return { x: v.x, y: v.y };
+};
+
+const parsePrompt = (value: unknown): Prompt | undefined => {
+  if (!value || typeof value !== 'object') return undefined;
+  const v = value as Partial<Prompt>;
+  if (typeof v.id !== 'string' || !v.id) return undefined;
+  if (typeof v.title !== 'string') return undefined;
+  if (typeof v.content !== 'string') return undefined;
+  if (typeof v.createdAt !== 'number' || Number.isNaN(v.createdAt) || !Number.isFinite(v.createdAt)) return undefined;
+  return { id: v.id, title: v.title, content: v.content, createdAt: v.createdAt };
+};
+
+const parsePromptLibrary = (value: unknown): Prompt[] | undefined => {
+  if (!Array.isArray(value)) return undefined;
+  const parsed = value.map(parsePrompt).filter((v): v is Prompt => Boolean(v));
+  if (parsed.length !== value.length) return undefined;
+  return parsed;
 };
 
 /**
@@ -92,6 +112,44 @@ export const writeStoredFloatBallPosition = async (position: FloatBallPosition):
     if (!chrome?.storage?.local) return;
     await new Promise<void>((resolve) => {
       chrome.storage.local.set({ [FLOAT_BALL_POSITION_STORAGE_KEY]: position }, () => resolve());
+    });
+  } catch {
+    return;
+  }
+};
+
+/**
+ * Reads the persisted prompt library list.
+ * @returns Promise<Prompt[] | undefined>
+ *
+ * Modification Notes:
+ *   - 2026-03-10 Added prompt library storage support.
+ */
+export const readStoredPromptLibrary = async (): Promise<Prompt[] | undefined> => {
+  try {
+    if (!chrome?.storage?.local) return undefined;
+    const result = await new Promise<Record<string, unknown>>((resolve) => {
+      chrome.storage.local.get([PROMPT_LIBRARY_STORAGE_KEY], (value) => resolve(value || {}));
+    });
+    return parsePromptLibrary(result[PROMPT_LIBRARY_STORAGE_KEY]);
+  } catch {
+    return undefined;
+  }
+};
+
+/**
+ * Persists the prompt library list.
+ * @param prompts Prompt[]
+ * @returns Promise<void>
+ *
+ * Modification Notes:
+ *   - 2026-03-10 Added prompt library storage support.
+ */
+export const writeStoredPromptLibrary = async (prompts: Prompt[]): Promise<void> => {
+  try {
+    if (!chrome?.storage?.local) return;
+    await new Promise<void>((resolve) => {
+      chrome.storage.local.set({ [PROMPT_LIBRARY_STORAGE_KEY]: prompts }, () => resolve());
     });
   } catch {
     return;

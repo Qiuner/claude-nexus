@@ -70,6 +70,28 @@
     "statusFailed": "Export failed",
     "statusFailedCount": "{{count}} failed"
   },
+  "promptLibrary": {
+    "title": "Prompt library",
+    "buttonLabel": "Prompts",
+    "buttonAria": "Open prompt library",
+    "closeAria": "Close prompt library",
+    "searchPlaceholder": "Search prompts...",
+    "new": "New",
+    "newAria": "Create new prompt",
+    "loading": "Loading...",
+    "empty": "No prompts yet. Create one to get started.",
+    "insert": "Insert",
+    "edit": "Edit",
+    "delete": "Delete",
+    "insertAria": "Insert prompt",
+    "editAria": "Edit prompt",
+    "deleteAria": "Delete prompt",
+    "deleteConfirm": "Delete \"{{title}}\"?",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Summarize this conversation",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Write your prompt here..."
+  },
   "widthControl": {
     "title": "Chat width",
     "valueLabel": "Width",

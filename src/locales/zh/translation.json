@@ -70,6 +70,28 @@
     "statusFailed": "导出失败",
     "statusFailedCount": "{{count}} 条失败"
   },
+  "promptLibrary": {
+    "title": "提示词库",
+    "buttonLabel": "提示词",
+    "buttonAria": "打开提示词库",
+    "closeAria": "关闭提示词库",
+    "searchPlaceholder": "搜索提示词…",
+    "new": "新建",
+    "newAria": "新建提示词",
+    "loading": "加载中…",
+    "empty": "暂无提示词，点击“新建”开始创建。",
+    "insert": "插入",
+    "edit": "编辑",
+    "delete": "删除",
+    "insertAria": "插入提示词",
+    "editAria": "编辑提示词",
+    "deleteAria": "删除提示词",
+    "deleteConfirm": "确定删除「{{title}}」吗？",
+    "titleLabel": "标题",
+    "titlePlaceholder": "例如：总结这段对话",
+    "contentLabel": "内容",
+    "contentPlaceholder": "在这里编写提示词…"
+  },
   "widthControl": {
     "title": "对话宽度",
     "valueLabel": "宽度",

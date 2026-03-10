@@ -14,7 +14,7 @@ import { EXPORT_SELECTORS } from '../../services/exportExtractors';
 
 const EXPORT_ROOT_ID = 'claude-nexus-export-button-root';
 const INIT_FLAG = '__claudeNexusExportInit__';
-const HISTORY_PATCH_FLAG = '__claudeNexusExportHistoryPatch__';
+const HISTORY_PATCH_FLAG = '__claudeNexusHistoryPatch__';
 
 type ExportPopoverProps = {
   open: boolean;
@@ -195,4 +195,3 @@ export const initExportButtonInjection = (): void => {
     window.setTimeout(() => mountIntoToolbar(), 0);
   });
 };
-

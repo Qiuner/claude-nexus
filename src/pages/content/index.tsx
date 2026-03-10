@@ -11,6 +11,7 @@ import FolderManager from './components/FolderManager';
 import Timeline from './components/Timeline';
 import FloatBall from './components/FloatBall';
 import { initExportButtonInjection } from './components/ExportButton';
+import { initPromptButtonInjection } from './components/PromptButton';
 
 const mount = async () => {
   await initI18n();
@@ -39,6 +40,7 @@ const mount = async () => {
   );
 
   initExportButtonInjection();
+  initPromptButtonInjection();
 };
 
 void mount();
