@@ -29,26 +29,38 @@ Drag and drop your chats into folders that make sense to you. Stop digging throu
 - **Easy management**: Rename, delete, and reorganize at any time
 - **Persistent storage**: Your folder structure is saved locally across sessions
 
-![New folder](docs/assets/NewFolder.png)
-
-![View folder](docs/assets/ViewFolder.png)
+![New folder](docs/assets/NewFolder.gif)
 
 ### 📍 Timeline Navigation
 
 **Never get lost in a long conversation again.**
 Visual nodes let you see the structure of your chat at a glance and jump to any message instantly. Fixed on the right; click to jump and hover to preview messages.
 
-![Timeline](docs/assets/timeline.png)
+![Timeline](docs/assets/TimeLine.gif)
 
-### 💡 Prompt Library _(coming soon)_
+### 🫧 Floating Ball + 📐 Chat Width Control
+
+**Quick access utilities.**
+Drag the floating ball anywhere and open panels for common actions, including chat width control (38–90rem, default 48rem).
+
+![FloatBall](docs/assets/FloatBall.png)
+![Chat width](docs/assets/DialogueWidth.gif)
+
+### 💡 Prompt Library
 
 **Your personal prompt arsenal.**
-Save your best prompts and reuse them without retyping.
+Save, search, edit, and insert prompts directly into the chat input toolbar.
 
-### 💾 Chat Export _(coming soon)_
+![PromptLibrary](docs/assets/PromptLibrary.png)
+![PromptLibrary](docs/assets/PromptLibrary.gif)
+
+### 💾 Chat Export
 
 **Your data, your format.**
-Export conversations as Markdown or JSON.
+Export conversations as Markdown or JSON from the toolbar.
+
+![ChatExport](docs/assets/ChatExport.png)
+![ChatExport](docs/assets/DownloadChatHistory.gif)
 
 ---
 
