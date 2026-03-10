@@ -23,8 +23,32 @@ type TimelineApi = {
 const SCROLL_OFFSET_PX = 80;
 const CHAT_RESYNC_DELAY_MS = 800;
 const CHAT_POLL_INTERVAL_MS = 500;
+const SIDEBAR_RESYNC_DEBOUNCE_MS = 800;
 
 const getChatId = (): string => window.location.pathname.split('/chat/')?.[1] ?? '';
+
+const findSidebarContainer = (): HTMLElement | null => {
+  const nav = document.querySelector('nav');
+  if (nav instanceof HTMLElement) return nav;
+  const fallback = document.querySelector('div.flex-1.relative');
+  return fallback instanceof HTMLElement ? fallback : null;
+};
+
+const mutationHasChatLink = (mutations: MutationRecord[]): boolean => {
+  for (const m of mutations) {
+    for (const node of Array.from(m.addedNodes)) {
+      if (!(node instanceof HTMLElement)) continue;
+      if (node.matches('a[href^="/chat/"]')) return true;
+      if (node.querySelector('a[href^="/chat/"]')) return true;
+    }
+    for (const node of Array.from(m.removedNodes)) {
+      if (!(node instanceof HTMLElement)) continue;
+      if (node.matches('a[href^="/chat/"]')) return true;
+      if (node.querySelector('a[href^="/chat/"]')) return true;
+    }
+  }
+  return false;
+};
 
 const findScrollContainer = (): HTMLElement | null => {
   const el = document.querySelector('[data-autoscroll-container="true"]');
@@ -74,6 +98,7 @@ export const useTimeline = (): TimelineApi => {
   const nodesRef = useRef(nodes);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const resyncTimeoutRef = useRef<number | null>(null);
+  const sidebarResyncTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     nodesRef.current = nodes;
@@ -111,6 +136,31 @@ export const useTimeline = (): TimelineApi => {
     return () => {
       window.clearInterval(timer);
       if (resyncTimeoutRef.current) window.clearTimeout(resyncTimeoutRef.current);
+    };
+  }, [refresh]);
+
+  useEffect(() => {
+    const sidebar = findSidebarContainer();
+    if (!sidebar) return;
+
+    const scheduleResync = () => {
+      if (sidebarResyncTimeoutRef.current) window.clearTimeout(sidebarResyncTimeoutRef.current);
+      sidebarResyncTimeoutRef.current = window.setTimeout(() => {
+        sidebarResyncTimeoutRef.current = null;
+        refresh();
+      }, SIDEBAR_RESYNC_DEBOUNCE_MS);
+    };
+
+    const mo = new MutationObserver((mutations) => {
+      if (!mutationHasChatLink(mutations)) return;
+      scheduleResync();
+    });
+
+    mo.observe(sidebar, { childList: true, subtree: true });
+
+    return () => {
+      mo.disconnect();
+      if (sidebarResyncTimeoutRef.current) window.clearTimeout(sidebarResyncTimeoutRef.current);
     };
   }, [refresh]);
 
