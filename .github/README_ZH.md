@@ -18,6 +18,12 @@
 
 ---
 
+> 我每天都在用 Claude。但随着对话越来越多，侧边栏会变得越来越乱：不能分组，也很难快速找到需要的内容。
+>
+> 有一天我看到了 [gemini-voyager](https://github.com/Nagi-ovo/gemini-voyager) 这个项目，被它的思路打动了。我在想：为什么 Claude 没有类似的增强套件？
+>
+> 所以我做了 claude-nexus。
+
 ## ✨ 功能
 
 ### 📂 对话文件夹管理
@@ -30,15 +36,14 @@
 - **持久化存储**：文件夹结构跨会话本地保存
 
 ![新建文件夹](../docs/assets/NewFolder.png)
-
-![查看文件夹](../docs/assets/ViewFolder.png)
+![新建文件夹](../docs/assets/NewFolder.gif)
 
 ### 📍 时间线导航
 
 **再也不会在长对话中迷失。**
 可视化节点让你一眼看清对话结构，点击即可跳转到任意消息。右侧固定时间线导航，点击节点快速跳转到对应消息，悬浮显示消息预览。
 
-![时间线导航](../docs/assets/timeline.png)
+![时间线导航](../docs/assets/TimeLine.gif)
 
 ### 🫧 悬浮球 + 📐 对话宽度调整
 
@@ -47,7 +52,7 @@
 
 ![悬浮球](../docs/assets/FloatBall.png)
 
-![对话宽度](../docs/assets/ChatWidth.png)
+![对话宽度](../docs/assets/DialogueWidth.gif)
 
 ### 💡 提示词库
 
@@ -55,6 +60,7 @@
 支持提示词保存、搜索、编辑与一键插入到输入框工具栏。
 
 ![提示词库](../docs/assets/PromptLibrary.png)
+![提示词库](../docs/assets/PromptLibrary.gif)
 
 ### 💾 对话导出
 
@@ -62,6 +68,7 @@
 在对话页面工具栏一键导出对话内容，支持 Markdown / JSON。
 
 ![对话导出](../docs/assets/ChatExport.png)
+![对话导出](../docs/assets/DownloadChatHistory.gif)
 
 ---
 

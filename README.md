@@ -18,6 +18,12 @@ Supercharge your [claude.ai](https://claude.ai) experience with folder organizat
 
 ---
 
+> I use Claude every day. But as conversations pile up, the sidebar becomes a mess — no way to group them, no way to find what you need.
+>
+> One day I came across [gemini-voyager](https://github.com/Nagi-ovo/gemini-voyager) and was genuinely impressed by the idea. I thought: why doesn't Claude have something like this?
+>
+> So I built it.
+
 ## ✨ Features
 
 ### 📂 Folder Organization
