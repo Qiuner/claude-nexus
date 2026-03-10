@@ -9,6 +9,7 @@ import { i18n, initI18n, LANGUAGE_CHANGE_MESSAGE_TYPE } from '@src/services/i18n
 import './style.css';
 import FolderManager from './components/FolderManager';
 import Timeline from './components/Timeline';
+import FloatBall from './components/FloatBall';
 
 const mount = async () => {
   await initI18n();
@@ -32,6 +33,7 @@ const mount = async () => {
     <>
       <FolderManager />
       <Timeline />
+      <FloatBall />
     </>,
   );
 };

@@ -4,7 +4,8 @@
     "cancel": "Cancel",
     "create": "Create",
     "delete": "Delete",
-    "rename": "Rename"
+    "rename": "Rename",
+    "reset": "Reset"
   },
   "folders": {
     "title": "Folders",
@@ -51,6 +52,12 @@
     "languageZh": "中文",
     "languageEn": "English",
     "hint": "Language changes apply to the current claude.ai tab."
+  },
+  "widthControl": {
+    "title": "Chat width",
+    "valueLabel": "Width",
+    "openAria": "Open chat width control",
+    "closeAria": "Close chat width control",
+    "sliderAria": "Adjust chat width"
   }
 }
-
