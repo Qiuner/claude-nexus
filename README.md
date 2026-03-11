@@ -74,7 +74,7 @@ Export conversations as Markdown or JSON from the toolbar.
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/your-username/claude-nexus.git
+   git clone https://github.com/Qiuner/claude-nexus.git
    cd claude-nexus
    ```
 
