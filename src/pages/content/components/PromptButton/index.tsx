@@ -89,10 +89,11 @@ type PromptPopoverProps = {
 
 const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
   const { t } = useTranslation();
-  const { prompts, loading, createPrompt, updatePrompt, deletePrompt, importFromFile, exportToFile } = usePromptLibrary();
+  const { tags, loading, createPrompt, updatePrompt, deletePrompt, importFromFile, exportToFile, filterPrompts } = usePromptLibrary();
 
   const [mode, setMode] = useState<ViewMode>('list');
   const [query, setQuery] = useState('');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft>({ title: '', content: '', tags: '' });
@@ -103,22 +104,20 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
     if (!open) return;
     setMode('list');
     setQuery('');
+    setSelectedTag(null);
     setEditingId(null);
     setPendingDeleteId(null);
     setDraft({ title: '', content: '', tags: '' });
     setImportMessage(null);
   }, [open]);
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return prompts;
-    return prompts.filter((p) => {
-      if (p.title.toLowerCase().includes(q)) return true;
-      if (p.content.toLowerCase().includes(q)) return true;
-      if (p.tags && p.tags.some((tag) => tag.toLowerCase().includes(q))) return true;
-      return false;
-    });
-  }, [prompts, query]);
+  const filtered = useMemo(() => filterPrompts(query, selectedTag), [filterPrompts, query, selectedTag]);
+
+  useEffect(() => {
+    if (!selectedTag) return;
+    if (tags.includes(selectedTag)) return;
+    setSelectedTag(null);
+  }, [selectedTag, tags]);
 
   const startCreate = () => {
     setEditingId(null);
@@ -216,41 +215,76 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
             }}
           />
 
-          <div className="mb-2 flex items-center gap-2">
-            <div className="flex flex-1 items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1">
-              <Search className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
-              <input
-                className="w-full bg-transparent text-[12px] outline-none"
-                placeholder={t('promptLibrary.searchPlaceholder')}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
+          <div className="mb-2 flex items-start gap-2">
+            <div className="flex flex-1 flex-col gap-2">
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1">
+                <Search className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+                <input
+                  className="w-full bg-transparent text-[12px] outline-none"
+                  placeholder={t('promptLibrary.searchPlaceholder')}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+
+              {tags.length ? (
+                <div className="flex flex-nowrap gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <button
+                    type="button"
+                    className={
+                      selectedTag === null
+                        ? 'whitespace-nowrap rounded-full border border-[#374151] !bg-[#374151] px-3 py-1 text-[12px] !text-white'
+                        : 'whitespace-nowrap rounded-full border border-[#e5e0d8] bg-white px-3 py-1 text-[12px] !text-[#374151] hover:bg-zinc-50'
+                    }
+                    onClick={() => setSelectedTag(null)}
+                  >
+                    {t('promptLibrary.filterAll')}
+                  </button>
+                  {tags.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      className={
+                        selectedTag === tag
+                          ? 'whitespace-nowrap rounded-full border border-[#374151] !bg-[#374151] px-3 py-1 text-[12px] !text-white'
+                          : 'whitespace-nowrap rounded-full border border-[#e5e0d8] bg-white px-3 py-1 text-[12px] !text-[#374151] hover:bg-zinc-50'
+                      }
+                      onClick={() => setSelectedTag(tag)}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
-              onClick={startImport}
-            >
-              <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
-              导入
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
-              onClick={() => void handleExport()}
-            >
-              <Download className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
-              导出
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
-              aria-label={t('promptLibrary.newAria')}
-              onClick={startCreate}
-            >
-              <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
-              {t('promptLibrary.new')}
-            </button>
+
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                onClick={startImport}
+              >
+                <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+                导入
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                onClick={() => void handleExport()}
+              >
+                <Download className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+                导出
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                aria-label={t('promptLibrary.newAria')}
+                onClick={startCreate}
+              >
+                <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+                {t('promptLibrary.new')}
+              </button>
+            </div>
           </div>
 
           {importMessage ? <div className="mb-2 text-[12px] text-[#6b7280]">{importMessage}</div> : null}

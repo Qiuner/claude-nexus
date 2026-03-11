@@ -76,6 +76,7 @@
     "buttonAria": "Open prompt library",
     "closeAria": "Close prompt library",
     "searchPlaceholder": "Search prompts...",
+    "filterAll": "All",
     "new": "New",
     "newAria": "Create new prompt",
     "loading": "Loading...",

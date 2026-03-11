@@ -16,12 +16,14 @@ type PromptDraft = {
 
 type PromptLibraryApi = {
   prompts: Prompt[];
+  tags: string[];
   loading: boolean;
   createPrompt: (draft: PromptDraft) => Promise<Prompt>;
   updatePrompt: (id: string, draft: PromptDraft) => Promise<Prompt | null>;
   deletePrompt: (id: string) => Promise<boolean>;
   importFromFile: (file: File) => Promise<{ imported: number; skipped: number }>;
   exportToFile: () => Promise<void>;
+  filterPrompts: (query: string, tag: string | null) => Prompt[];
 };
 
 const normalizeDraft = (draft: PromptDraft): PromptDraft => {
@@ -34,6 +36,31 @@ const normalizeDraft = (draft: PromptDraft): PromptDraft => {
     content: draft.content.trim(),
     tags: tags.length ? tags : undefined,
   };
+};
+
+const buildTagSet = (prompts: Prompt[]): string[] => {
+  const set = new Set<string>();
+  for (const p of prompts) {
+    for (const tag of p.tags ?? []) {
+      const t = tag.trim();
+      if (t) set.add(t);
+    }
+  }
+  return Array.from(set).sort((a, b) => a.localeCompare(b));
+};
+
+const matchesQuery = (prompt: Prompt, query: string): boolean => {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  if (prompt.title.toLowerCase().includes(q)) return true;
+  if (prompt.content.toLowerCase().includes(q)) return true;
+  if (prompt.tags && prompt.tags.some((t) => t.toLowerCase().includes(q))) return true;
+  return false;
+};
+
+const matchesTag = (prompt: Prompt, tag: string | null): boolean => {
+  if (!tag) return true;
+  return Boolean(prompt.tags && prompt.tags.includes(tag));
 };
 
 type GeminiVoyagerPromptsExport = {
@@ -202,7 +229,13 @@ export const usePromptLibrary = (): PromptLibraryApi => {
     downloadJson(filename, payload);
   }, [prompts]);
 
+  const tags = useMemo(() => buildTagSet(prompts), [prompts]);
+
+  const filterPrompts = useCallback((query: string, tag: string | null): Prompt[] => {
+    return prompts.filter((p) => matchesTag(p, tag) && matchesQuery(p, query));
+  }, [prompts]);
+
   return useMemo(() => {
-    return { prompts, loading, createPrompt, updatePrompt, deletePrompt, importFromFile, exportToFile };
-  }, [createPrompt, deletePrompt, exportToFile, importFromFile, loading, prompts, updatePrompt]);
+    return { prompts, tags, loading, createPrompt, updatePrompt, deletePrompt, importFromFile, exportToFile, filterPrompts };
+  }, [createPrompt, deletePrompt, exportToFile, filterPrompts, importFromFile, loading, prompts, tags, updatePrompt]);
 };
