@@ -49,7 +49,6 @@ Visual nodes let you see the structure of your chat at a glance and jump to any 
 **Quick access utilities.**
 Drag the floating ball anywhere and open panels for common actions, including chat width control (38–90rem, default 48rem).
 
-![FloatBall](docs/assets/FloatBall.png)
 ![Chat width](docs/assets/DialogueWidth.gif)
 
 ### 💡 Prompt Library
@@ -57,7 +56,6 @@ Drag the floating ball anywhere and open panels for common actions, including ch
 **Your personal prompt arsenal.**
 Save, search, edit, and insert prompts directly into the chat input toolbar.
 
-![PromptLibrary](docs/assets/PromptLibrary.png)
 ![PromptLibrary](docs/assets/PromptLibrary.gif)
 
 ### 💾 Chat Export
@@ -65,7 +63,6 @@ Save, search, edit, and insert prompts directly into the chat input toolbar.
 **Your data, your format.**
 Export conversations as Markdown or JSON from the toolbar.
 
-![ChatExport](docs/assets/ChatExport.png)
 ![ChatExport](docs/assets/DownloadChatHistory.gif)
 
 ---

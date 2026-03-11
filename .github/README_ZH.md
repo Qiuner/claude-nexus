@@ -35,7 +35,6 @@
 - **便捷管理**：随时重命名、删除和重新整理
 - **持久化存储**：文件夹结构跨会话本地保存
 
-![新建文件夹](../docs/assets/NewFolder.png)
 ![新建文件夹](../docs/assets/NewFolder.gif)
 
 ### 📍 时间线导航
@@ -50,8 +49,6 @@
 **常用能力快速入口。**
 悬浮球可拖拽到任意位置，通过面板提供常用操作入口，包括对话宽度调整（38–90rem，默认 48rem）。
 
-![悬浮球](../docs/assets/FloatBall.png)
-
 ![对话宽度](../docs/assets/DialogueWidth.gif)
 
 ### 💡 提示词库
@@ -59,7 +56,6 @@
 **你的个人提示词武器库。**
 支持提示词保存、搜索、编辑与一键插入到输入框工具栏。
 
-![提示词库](../docs/assets/PromptLibrary.png)
 ![提示词库](../docs/assets/PromptLibrary.gif)
 
 ### 💾 对话导出
@@ -67,7 +63,6 @@
 **你的数据，你做主。**
 在对话页面工具栏一键导出对话内容，支持 Markdown / JSON。
 
-![对话导出](../docs/assets/ChatExport.png)
 ![对话导出](../docs/assets/DownloadChatHistory.gif)
 
 ---
