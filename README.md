@@ -56,6 +56,10 @@ Drag the floating ball anywhere and open panels for common actions, including ch
 **Your personal prompt arsenal.**
 Save, search, edit, and insert prompts directly into the chat input toolbar.
 
+- **Import**: In the Prompt Library panel, click Import and select a gemini-voyager exported `.json` file. Duplicates are skipped and the result is shown.
+- **Export**: Click Export to download `claude-nexus-prompts-{YYYY-MM-DD}.json` in a gemini-voyager compatible format.
+- **Compatible format**: `gemini-voyager.prompts.v1`
+
 ![PromptLibrary](docs/assets/PromptLibrary.gif)
 
 ### 💾 Chat Export
@@ -64,6 +68,14 @@ Save, search, edit, and insert prompts directly into the chat input toolbar.
 Export conversations as Markdown or JSON from the toolbar.
 
 ![ChatExport](docs/assets/DownloadChatHistory.gif)
+
+### 🌐 Language Switch
+
+**Use claude-nexus in your preferred language.**
+
+- **Entry**: Click the extension icon in the browser toolbar to open the popup
+- **Languages**: 中文 / English
+  ![LanguageSwitch](docs/assets/LanguageSwitch.gif)
 
 ---
 

@@ -11,6 +11,7 @@ import { readStoredPromptLibrary, writeStoredPromptLibrary } from '@src/services
 type PromptDraft = {
   title: string;
   content: string;
+  tags?: string[];
 };
 
 type PromptLibraryApi = {
@@ -19,13 +20,47 @@ type PromptLibraryApi = {
   createPrompt: (draft: PromptDraft) => Promise<Prompt>;
   updatePrompt: (id: string, draft: PromptDraft) => Promise<Prompt | null>;
   deletePrompt: (id: string) => Promise<boolean>;
+  importFromFile: (file: File) => Promise<{ imported: number; skipped: number }>;
+  exportToFile: () => Promise<void>;
 };
 
 const normalizeDraft = (draft: PromptDraft): PromptDraft => {
+  const tags = (draft.tags ?? [])
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .filter((t, i, arr) => arr.indexOf(t) === i);
   return {
     title: draft.title.trim(),
     content: draft.content.trim(),
+    tags: tags.length ? tags : undefined,
   };
+};
+
+type GeminiVoyagerPromptsExport = {
+  format: string;
+  exportedAt: string;
+  items: Array<{ id: string; text: string; tags?: string[]; createdAt: number }>;
+};
+
+const formatDateForFilename = (d: Date): string => {
+  return d.toISOString().slice(0, 10);
+};
+
+const downloadJson = (filename: string, data: unknown): void => {
+  const text = JSON.stringify(data, null, 2);
+  const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.rel = 'noopener';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
 const generateId = (): string => {
@@ -62,7 +97,13 @@ export const usePromptLibrary = (): PromptLibraryApi => {
 
   const createPrompt = useCallback(async (draft: PromptDraft): Promise<Prompt> => {
     const normalized = normalizeDraft(draft);
-    const prompt: Prompt = { id: generateId(), title: normalized.title, content: normalized.content, createdAt: Date.now() };
+    const prompt: Prompt = {
+      id: generateId(),
+      title: normalized.title,
+      content: normalized.content,
+      tags: normalized.tags,
+      createdAt: Date.now(),
+    };
     const next = [prompt, ...prompts];
     await persist(next);
     return prompt;
@@ -72,7 +113,7 @@ export const usePromptLibrary = (): PromptLibraryApi => {
     const index = prompts.findIndex((p) => p.id === id);
     if (index < 0) return null;
     const normalized = normalizeDraft(draft);
-    const updated: Prompt = { ...prompts[index], title: normalized.title, content: normalized.content };
+    const updated: Prompt = { ...prompts[index], title: normalized.title, content: normalized.content, tags: normalized.tags };
     const next = prompts.slice();
     next[index] = updated;
     await persist(next);
@@ -86,8 +127,82 @@ export const usePromptLibrary = (): PromptLibraryApi => {
     return true;
   }, [persist, prompts]);
 
-  return useMemo(() => {
-    return { prompts, loading, createPrompt, updatePrompt, deletePrompt };
-  }, [createPrompt, deletePrompt, loading, prompts, updatePrompt]);
-};
+  const importFromFile = useCallback(async (file: File): Promise<{ imported: number; skipped: number }> => {
+    const text = await file.text();
+    const parsed = JSON.parse(text) as unknown;
+    if (!parsed || typeof parsed !== 'object') throw new Error('Invalid file');
 
+    const data = parsed as Partial<GeminiVoyagerPromptsExport>;
+    if (data.format !== 'gemini-voyager.prompts.v1') throw new Error('Unsupported format');
+    if (!Array.isArray(data.items)) throw new Error('Invalid items');
+
+    const existing = new Set(prompts.map((p) => p.content));
+    const nextImported: Prompt[] = [];
+    let skipped = 0;
+
+    for (const item of data.items) {
+      if (!item || typeof item !== 'object') {
+        skipped += 1;
+        continue;
+      }
+      const v = item as Partial<GeminiVoyagerPromptsExport['items'][number]>;
+      if (typeof v.text !== 'string') {
+        skipped += 1;
+        continue;
+      }
+      const content = v.text.trim();
+      if (!content) {
+        skipped += 1;
+        continue;
+      }
+      if (existing.has(content)) {
+        skipped += 1;
+        continue;
+      }
+      existing.add(content);
+
+      const title = content.split('\n')[0]?.trim() || 'Untitled';
+      const tags =
+        v.tags && Array.isArray(v.tags) && v.tags.every((t) => typeof t === 'string')
+          ? v.tags.map((t) => t.trim()).filter(Boolean).filter((t, i, arr) => arr.indexOf(t) === i)
+          : [];
+
+      nextImported.push({
+        id: generateId(),
+        title: title.length > 60 ? `${title.slice(0, 60)}…` : title,
+        content,
+        tags: tags.length ? tags : undefined,
+        createdAt: Date.now(),
+      });
+    }
+
+    if (nextImported.length) {
+      await persist([...nextImported, ...prompts]);
+    }
+
+    return { imported: nextImported.length, skipped };
+  }, [persist, prompts]);
+
+  const exportToFile = useCallback(async (): Promise<void> => {
+    const now = new Date();
+    const payload: GeminiVoyagerPromptsExport = {
+      format: 'gemini-voyager.prompts.v1',
+      exportedAt: now.toISOString(),
+      items: prompts.map((p) => {
+        return {
+          id: p.id,
+          text: p.content,
+          tags: p.tags && p.tags.length ? p.tags : [],
+          createdAt: p.createdAt,
+        };
+      }),
+    };
+
+    const filename = `claude-nexus-prompts-${formatDateForFilename(now)}.json`;
+    downloadJson(filename, payload);
+  }, [prompts]);
+
+  return useMemo(() => {
+    return { prompts, loading, createPrompt, updatePrompt, deletePrompt, importFromFile, exportToFile };
+  }, [createPrompt, deletePrompt, exportToFile, importFromFile, loading, prompts, updatePrompt]);
+};

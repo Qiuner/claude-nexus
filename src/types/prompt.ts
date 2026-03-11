@@ -14,7 +14,8 @@ export type Prompt = {
   title: string;
   /** Prompt content */
   content: string;
+  /** Optional tag list (compatible with legacy data) */
+  tags?: string[];
   /** Creation timestamp (ms) */
   createdAt: number;
 };
-

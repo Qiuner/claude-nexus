@@ -56,6 +56,10 @@
 **你的个人提示词武器库。**
 支持提示词保存、搜索、编辑与一键插入到输入框工具栏。
 
+- **导入**：在提示词库面板点击「导入」，选择 gemini-voyager 导出的 `.json` 文件即可；重复项会自动跳过并提示跳过数量
+- **导出**：在提示词库面板点击「导出」，下载 `claude-nexus-prompts-{YYYY-MM-DD}.json`，格式与 gemini-voyager 兼容，支持双向互通
+- **兼容格式**：`gemini-voyager.prompts.v1`
+
 ![提示词库](../docs/assets/PromptLibrary.gif)
 
 ### 💾 对话导出
@@ -64,6 +68,14 @@
 在对话页面工具栏一键导出对话内容，支持 Markdown / JSON。
 
 ![对话导出](../docs/assets/DownloadChatHistory.gif)
+
+### 🌐 语言切换
+
+**用你习惯的语言使用 claude-nexus。**
+
+- **入口**：浏览器工具栏点击插件图标打开 popup
+- **支持语言**：中文 / English
+  ![LanguageSwitch](../docs/assets/LanguageSwitch.gif)
 
 ---
 

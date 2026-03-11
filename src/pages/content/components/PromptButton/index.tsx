@@ -6,7 +6,7 @@
 
 import { createRoot } from 'react-dom/client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { BookText, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
+import { BookText, Download, Pencil, Plus, Search, Trash2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { usePromptLibrary } from '../../hooks/usePromptLibrary';
 import type { Prompt } from '@src/types/prompt';
@@ -20,6 +20,7 @@ type ViewMode = 'list' | 'edit';
 type Draft = {
   title: string;
   content: string;
+  tags: string;
 };
 
 const getChatInputElement = (): HTMLElement | null => {
@@ -67,6 +68,20 @@ const buildPreview = (content: string): string => {
   return `${normalized.slice(0, 30)}…`;
 };
 
+const parseTagsInput = (input: string): string[] => {
+  const tags = input
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .filter((t, i, arr) => arr.indexOf(t) === i);
+  return tags;
+};
+
+const formatTagsInput = (tags?: string[]): string => {
+  if (!tags || tags.length === 0) return '';
+  return tags.join(', ');
+};
+
 type PromptPopoverProps = {
   open: boolean;
   onClose: () => void;
@@ -74,13 +89,15 @@ type PromptPopoverProps = {
 
 const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
   const { t } = useTranslation();
-  const { prompts, loading, createPrompt, updatePrompt, deletePrompt } = usePromptLibrary();
+  const { prompts, loading, createPrompt, updatePrompt, deletePrompt, importFromFile, exportToFile } = usePromptLibrary();
 
   const [mode, setMode] = useState<ViewMode>('list');
   const [query, setQuery] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
-  const [draft, setDraft] = useState<Draft>({ title: '', content: '' });
+  const [draft, setDraft] = useState<Draft>({ title: '', content: '', tags: '' });
+  const [importMessage, setImportMessage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -88,26 +105,32 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
     setQuery('');
     setEditingId(null);
     setPendingDeleteId(null);
-    setDraft({ title: '', content: '' });
+    setDraft({ title: '', content: '', tags: '' });
+    setImportMessage(null);
   }, [open]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return prompts;
-    return prompts.filter((p) => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
+    return prompts.filter((p) => {
+      if (p.title.toLowerCase().includes(q)) return true;
+      if (p.content.toLowerCase().includes(q)) return true;
+      if (p.tags && p.tags.some((tag) => tag.toLowerCase().includes(q))) return true;
+      return false;
+    });
   }, [prompts, query]);
 
   const startCreate = () => {
     setEditingId(null);
     setPendingDeleteId(null);
-    setDraft({ title: '', content: '' });
+    setDraft({ title: '', content: '', tags: '' });
     setMode('edit');
   };
 
   const startEdit = (prompt: Prompt) => {
     setEditingId(prompt.id);
     setPendingDeleteId(null);
-    setDraft({ title: prompt.title, content: prompt.content });
+    setDraft({ title: prompt.title, content: prompt.content, tags: formatTagsInput(prompt.tags) });
     setMode('edit');
   };
 
@@ -115,11 +138,12 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
     const title = draft.title.trim();
     const content = draft.content.trim();
     if (!title || !content) return;
+    const tags = parseTagsInput(draft.tags);
 
     if (editingId) {
-      await updatePrompt(editingId, { title, content });
+      await updatePrompt(editingId, { title, content, tags: tags.length ? tags : undefined });
     } else {
-      await createPrompt({ title, content });
+      await createPrompt({ title, content, tags: tags.length ? tags : undefined });
     }
     setMode('list');
   };
@@ -134,6 +158,33 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
     if (!ok) return;
     setPendingDeleteId(null);
     onClose();
+  };
+
+  const startImport = () => {
+    setImportMessage(null);
+    fileInputRef.current?.click();
+  };
+
+  const handleExport = async () => {
+    setImportMessage(null);
+    try {
+      await exportToFile();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Unknown error';
+      setImportMessage(`导出失败：${msg}`);
+    }
+  };
+
+  const handleImportFile = async (file: File) => {
+    try {
+      const result = await importFromFile(file);
+      setImportMessage(`成功导入 ${result.imported} 条，跳过 ${result.skipped} 条`);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Unknown error';
+      setImportMessage(`导入失败：${msg}`);
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   if (!open) return null;
@@ -154,6 +205,17 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
 
       {mode === 'list' ? (
         <>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void handleImportFile(file);
+            }}
+          />
+
           <div className="mb-2 flex items-center gap-2">
             <div className="flex flex-1 items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1">
               <Search className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
@@ -167,6 +229,22 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
             <button
               type="button"
               className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+              onClick={startImport}
+            >
+              <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+              导入
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+              onClick={() => void handleExport()}
+            >
+              <Download className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+              导出
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
               aria-label={t('promptLibrary.newAria')}
               onClick={startCreate}
             >
@@ -174,6 +252,8 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
               {t('promptLibrary.new')}
             </button>
           </div>
+
+          {importMessage ? <div className="mb-2 text-[12px] text-[#6b7280]">{importMessage}</div> : null}
 
           {loading ? (
             <div className="py-6 text-center text-[12px] text-[#6b7280]">{t('promptLibrary.loading')}</div>
@@ -188,6 +268,15 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                       <div className="min-w-0">
                         <div className="truncate text-[12px] font-medium">{p.title}</div>
                         <div className="mt-1 truncate text-[12px] text-[#6b7280]">{buildPreview(p.content)}</div>
+                        {p.tags && p.tags.length ? (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {p.tags.map((tag) => (
+                              <span key={tag} className="rounded border border-[#e5e0d8] bg-white px-1.5 py-0.5 text-[11px] text-[#6b7280]">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
                       </div>
                       <div className="flex shrink-0 items-center gap-1">
                         {pendingDeleteId === p.id ? null : (
@@ -283,6 +372,15 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
               value={draft.title}
               onChange={(e) => setDraft((v) => ({ ...v, title: e.target.value }))}
               placeholder={t('promptLibrary.titlePlaceholder')}
+            />
+          </div>
+          <div className="mb-2">
+            <div className="mb-1 text-[12px] text-[#6b7280]">Tags</div>
+            <input
+              className="w-full rounded-lg border border-[#e5e0d8] bg-white px-2 py-2 text-[12px] outline-none focus:border-[#c96442]"
+              value={draft.tags}
+              onChange={(e) => setDraft((v) => ({ ...v, tags: e.target.value }))}
+              placeholder="tag1, tag2"
             />
           </div>
           <div className="mb-3">
