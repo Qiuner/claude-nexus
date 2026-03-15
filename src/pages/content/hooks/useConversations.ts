@@ -88,9 +88,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
   useEffect(() => {
     const ensureInjected = () => {
       const ul = findNavUl();
-      if (!ul) return;
-
-      if (lastNavUlRef.current !== ul) {
+      if (ul && lastNavUlRef.current !== ul) {
         lastNavUlRef.current = ul;
         setNavUlEl(ul);
         bumpScanTick();
@@ -106,6 +104,14 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
       container.id = INJECTED_CONTAINER_ID;
       container.className = 'px-2 pt-2 pb-1';
 
+      const recentsSection = document.querySelector('nav div.flex-1.relative');
+      if (recentsSection instanceof HTMLElement) {
+        recentsSection.insertAdjacentElement('beforebegin', container);
+        setPortalContainer(container);
+        return;
+      }
+
+      if (!ul) return;
       const parent = ul.parentElement;
       if (!parent) return;
 
