@@ -34,35 +34,35 @@ const getThemeTokens = (isDarkTheme: boolean): ThemeTokens => {
   if (isDarkTheme) {
     return {
       rootText: 'text-zinc-200',
-      headerText: 'text-zinc-300',
-      mutedText: 'text-zinc-400',
-      subtleText: 'text-zinc-500',
-      border: 'border-zinc-800',
+      headerText: 'text-zinc-400',
+      mutedText: 'text-zinc-500',
+      subtleText: 'text-zinc-600',
+      border: 'border-white/10',
       panelBg: 'bg-transparent',
-      hoverBg: 'hover:bg-zinc-800/60',
-      input: 'border-zinc-700 bg-zinc-900/60 text-zinc-100 placeholder:text-zinc-500 focus:ring-zinc-500',
-      icon: 'text-zinc-500 hover:text-zinc-200',
-      iconDanger: 'text-zinc-500 hover:text-red-300',
-      iconHoverBg: 'hover:bg-zinc-800/60',
-      menu: 'border-zinc-700 bg-zinc-900/95 text-zinc-100',
-      divider: 'bg-zinc-700/60',
+      hoverBg: 'hover:bg-white/5',
+      input: 'border-white/10 bg-black/20 text-zinc-200 placeholder:text-zinc-600 focus:border-white/20 focus:ring-0',
+      icon: 'text-zinc-500 hover:text-zinc-300',
+      iconDanger: 'text-zinc-500 hover:text-red-400',
+      iconHoverBg: 'hover:bg-white/10',
+      menu: 'border-white/10 bg-zinc-900 text-zinc-200',
+      divider: 'bg-white/10',
     };
   }
 
   return {
-    rootText: 'text-zinc-900',
-    headerText: 'text-zinc-700',
-    mutedText: 'text-zinc-600',
-    subtleText: 'text-zinc-500',
-    border: 'border-zinc-200',
+    rootText: 'text-stone-800',
+    headerText: 'text-stone-500',
+    mutedText: 'text-stone-400',
+    subtleText: 'text-stone-300',
+    border: 'border-black/5',
     panelBg: 'bg-transparent',
-    hoverBg: 'hover:bg-zinc-100/80',
-    input: 'border-zinc-300 bg-white text-zinc-900 placeholder:text-zinc-400 focus:ring-zinc-400',
-    icon: 'text-zinc-500 hover:text-zinc-900',
-    iconDanger: 'text-zinc-500 hover:text-red-600',
-    iconHoverBg: 'hover:bg-zinc-100/80',
-    menu: 'border-zinc-200 bg-white text-zinc-900',
-    divider: 'bg-zinc-200',
+    hoverBg: 'hover:bg-black/5',
+    input: 'border-black/10 bg-white/50 text-stone-800 placeholder:text-stone-400 focus:border-black/20 focus:ring-0',
+    icon: 'text-stone-400 hover:text-stone-700',
+    iconDanger: 'text-stone-400 hover:text-red-600',
+    iconHoverBg: 'hover:bg-black/5',
+    menu: 'border-black/5 bg-white text-stone-800',
+    divider: 'bg-black/5',
   };
 };
 
@@ -146,12 +146,12 @@ export default function FolderManager() {
   if (!portalContainer) return null;
 
   return createPortal(
-    <div className={`text-[12px] leading-4 ${theme.rootText}`}>
-      <div className="flex items-center justify-between gap-2">
+    <div className={`text-sm ${theme.rootText}`}>
+      <div className="flex items-center justify-between px-2 py-1 mb-1">
         <div className={`text-xs font-medium ${theme.headerText}`}>{t('folders.title')}</div>
         <button
           type="button"
-          className={`rounded p-1 transition-all duration-150 ${theme.icon} ${theme.iconHoverBg}`}
+          className={`rounded-md p-1 transition-colors ${theme.icon} ${theme.iconHoverBg}`}
           onClick={() => {
             setIsCreatingFolder((v) => !v);
             setNewFolderName('');
@@ -159,16 +159,16 @@ export default function FolderManager() {
           aria-label={t('folders.newFolderAria')}
           title={t('folders.newFolderAria')}
         >
-          <Plus className="h-4 w-4" aria-hidden="true" />
+          <Plus className="h-3.5 w-3.5" aria-hidden="true" />
         </button>
       </div>
 
       {isCreatingFolder ? (
-        <div className="mt-2 flex items-center gap-2">
+        <div className="mb-2 flex items-center gap-2 px-2">
           <input
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
-            className={`w-full rounded border px-2 py-1 text-xs focus:outline-none focus:ring-1 ${theme.input}`}
+            className={`w-full rounded-md border px-2 py-1 text-sm focus:outline-none focus:ring-1 ${theme.input}`}
             placeholder={t('folders.folderName')}
             aria-label={t('folders.folderName')}
             onKeyDown={(e) => {
@@ -179,7 +179,7 @@ export default function FolderManager() {
           />
           <button
             type="button"
-            className={`rounded px-2 py-1 text-[11px] ${theme.rootText} ${theme.hoverBg}`}
+            className={`rounded-md px-2 py-1 text-xs transition-colors ${theme.rootText} ${theme.hoverBg}`}
             onClick={() => void handleCreateFolder()}
             aria-label={t('folders.createFolderAria')}
           >
@@ -187,7 +187,7 @@ export default function FolderManager() {
           </button>
           <button
             type="button"
-            className={`rounded px-2 py-1 text-[11px] ${theme.mutedText} ${theme.hoverBg}`}
+            className={`rounded-md px-2 py-1 text-xs transition-colors ${theme.mutedText} ${theme.hoverBg}`}
             onClick={() => {
               setIsCreatingFolder(false);
               setNewFolderName('');
@@ -199,7 +199,7 @@ export default function FolderManager() {
         </div>
       ) : null}
 
-      <div className="mt-2">
+      <div className="mt-1">
         <FolderList
           folders={folders}
           theme={theme}
@@ -215,7 +215,7 @@ export default function FolderManager() {
         />
 
         <div
-          className={`rounded border border-dashed bg-transparent px-2 py-1 text-[10px] transition-all duration-150 ${theme.border} ${theme.subtleText} ${theme.hoverBg}`}
+          className={`mt-2 rounded-lg border border-dashed bg-transparent px-2 py-2 text-center text-xs transition-colors ${theme.border} ${theme.subtleText} ${theme.hoverBg}`}
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleUnfiledDrop}
           aria-label={t('folders.unfiledDropAria')}

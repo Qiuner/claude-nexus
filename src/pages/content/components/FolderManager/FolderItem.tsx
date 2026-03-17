@@ -69,7 +69,7 @@ export default function FolderItem({
       <a
         key={conversationId}
         href={href}
-        className={`block truncate rounded px-2 py-1 text-xs ${theme.rootText} ${theme.hoverBg}`}
+        className={`block truncate rounded-md pl-8 pr-2 py-1.5 text-sm transition-colors ${theme.rootText} ${theme.hoverBg}`}
         tabIndex={0}
         aria-label={t('conversation.openAria', { title })}
       >
@@ -80,26 +80,32 @@ export default function FolderItem({
 
   return (
     <div
-      className={`group rounded-md transition-all duration-150 ${theme.hoverBg}`}
+      className="group flex flex-col"
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDrop}
       aria-label={t('folderItem.folderAria', { name: folder.name })}
     >
-      <div className="flex items-center gap-2 px-2 py-1">
+      <div 
+        className={`flex items-center gap-1.5 px-2 py-1.5 rounded-md transition-colors cursor-pointer ${theme.hoverBg}`}
+        onClick={() => onToggleExpanded(folder.id)}
+      >
         <button
           type="button"
-          className={`shrink-0 rounded p-1 transition-all duration-150 ${theme.icon} ${theme.iconHoverBg}`}
-          onClick={() => onToggleExpanded(folder.id)}
+          className={`shrink-0 rounded p-0.5 transition-colors ${theme.icon} ${theme.iconHoverBg}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleExpanded(folder.id);
+          }}
           aria-label={folder.isExpanded ? t('folderItem.collapse') : t('folderItem.expand')}
         >
-          {folder.isExpanded ? <ChevronDown className="h-4 w-4" aria-hidden="true" /> : <ChevronRight className="h-4 w-4" aria-hidden="true" />}
+          {folder.isExpanded ? <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" /> : <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />}
         </button>
 
         {isEditing ? (
           <input
             value={editingName}
             onChange={(e) => onEditingNameChange(e.target.value)}
-            className={`w-full rounded border px-2 py-1 text-xs focus:outline-none focus:ring-1 ${theme.input}`}
+            className={`w-full rounded-md border px-2 py-1 text-sm focus:outline-none focus:ring-1 ${theme.input}`}
             aria-label={t('folderItem.renameAria')}
             onKeyDown={(e) => {
               if (e.key !== 'Enter') return;
@@ -107,43 +113,50 @@ export default function FolderItem({
             }}
             onBlur={() => onRenameCommit(folder.id)}
             autoFocus
+            onClick={(e) => e.stopPropagation()}
           />
         ) : (
           <div className="min-w-0 flex-1">
-            <div className={`truncate text-[13px] ${theme.rootText}`}>{folder.name}</div>
+            <div className={`truncate text-sm font-medium ${theme.rootText}`}>{folder.name}</div>
           </div>
         )}
 
-        <div className={`shrink-0 text-[11px] ${theme.mutedText}`}>{count}</div>
+        <div className={`shrink-0 text-xs ${theme.mutedText}`}>{count}</div>
 
-        <div className="flex shrink-0 items-center gap-1 opacity-0 transition-all duration-150 group-hover:opacity-100">
+        <div className="flex shrink-0 items-center gap-0.5 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
           <button
             type="button"
-            className={`rounded p-1 transition-all duration-150 ${theme.icon} ${theme.iconHoverBg}`}
-            onClick={() => onRenameStart(folder)}
+            className={`rounded p-1 transition-colors ${theme.icon} ${theme.iconHoverBg}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRenameStart(folder);
+            }}
             aria-label={t('folderItem.renameAria')}
             title={t('common.rename')}
           >
-            <Pencil className="h-4 w-4" aria-hidden="true" />
+            <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
           <button
             type="button"
-            className={`rounded p-1 transition-all duration-150 ${theme.iconDanger} ${theme.iconHoverBg}`}
-            onClick={(e) => onDelete(folder.id, e.currentTarget.getBoundingClientRect())}
+            className={`rounded p-1 transition-colors ${theme.iconDanger} ${theme.iconHoverBg}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(folder.id, e.currentTarget.getBoundingClientRect());
+            }}
             aria-label={t('folderItem.deleteAria')}
             title={t('common.delete')}
           >
-            <Trash2 className="h-4 w-4" aria-hidden="true" />
+            <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
         </div>
       </div>
 
       {folder.isExpanded ? (
-        <div className="px-1 pb-1">
+        <div className="mt-[2px] pb-1">
           {folder.conversationIds.length === 0 ? (
-            <div className={`px-2 py-1 text-[10px] ${theme.subtleText}`}>{t('folderItem.dropHint')}</div>
+            <div className={`px-8 py-1.5 text-xs ${theme.subtleText}`}>{t('folderItem.dropHint')}</div>
           ) : (
-            <div className="space-y-0.5">{folder.conversationIds.map(renderConversationLink)}</div>
+            <div className="space-y-[2px]">{folder.conversationIds.map(renderConversationLink)}</div>
           )}
         </div>
       ) : null}

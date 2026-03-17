@@ -48,7 +48,7 @@ const FolderList = ({
   onDropConversationToFolder,
 }: Props) => {
   return (
-    <div className="mt-1 space-y-1">
+    <div className="space-y-[2px]">
       {folders.map((folder) => (
         <FolderItem
           key={folder.id}
