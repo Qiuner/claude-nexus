@@ -10,6 +10,7 @@ import { Plus } from 'lucide-react';
 import type { Folder } from '@src/types/folder';
 import { useConversations } from '../../hooks/useConversations';
 import { useFolders } from '../../hooks/useFolders';
+import { useSidebarOpen } from '../../hooks/useSidebarOpen';
 import { getConversationIdFromDragEvent } from '../../utils/dom';
 import FolderList from './FolderList';
 import { FolderManagerModals } from './FolderManagerModals';
@@ -68,6 +69,7 @@ const getThemeTokens = (isDarkTheme: boolean): ThemeTokens => {
 
 export default function FolderManager() {
   const { t } = useTranslation();
+  const isSidebarOpen = useSidebarOpen();
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -143,6 +145,7 @@ export default function FolderManager() {
 
   const handleCloseContextMenu = () => setContextMenu(null);
 
+  if (!isSidebarOpen) return null;
   if (!portalContainer) return null;
 
   return createPortal(
