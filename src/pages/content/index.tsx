@@ -20,7 +20,7 @@ const mount = async () => {
     if (!message || typeof message !== 'object') return;
     const payload = message as { type?: string; lang?: string };
     if (payload.type !== LANGUAGE_CHANGE_MESSAGE_TYPE) return;
-    if (payload.lang !== 'en' && payload.lang !== 'zh') return;
+    if (payload.lang !== 'en' && payload.lang !== 'zh' && payload.lang !== 'zh-TW') return;
     void i18n.changeLanguage(payload.lang);
   });
 

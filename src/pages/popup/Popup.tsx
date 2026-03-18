@@ -16,7 +16,8 @@ import type { Language } from '@src/types/settings';
  */
 export default function Popup() {
   const { t, i18n } = useTranslation();
-  const currentLanguage = (i18n.resolvedLanguage === 'zh' ? 'zh' : 'en') satisfies Language;
+  const resolved = i18n.resolvedLanguage;
+  const currentLanguage: Language = resolved === 'zh' ? 'zh' : resolved === 'zh-TW' ? 'zh-TW' : 'en';
 
   /**
    * Notifies the active tab content script to switch language at runtime.
@@ -67,8 +68,9 @@ export default function Popup() {
           value={currentLanguage}
           onChange={(e) => handleLanguageChange(e.target.value as Language)}
         >
-          <option value="zh">{t('popup.languageZh')}</option>
           <option value="en">{t('popup.languageEn')}</option>
+          <option value="zh">{t('popup.languageZh')}</option>
+          <option value="zh-TW">{t('popup.languageZhTW')}</option>
         </select>
       </div>
       <div className="mt-2 text-[12px] text-[#6B6B6B]">{t('popup.hint')}</div>

@@ -170,17 +170,17 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
       await exportToFile();
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Unknown error';
-      setImportMessage(`导出失败：${msg}`);
+      setImportMessage(t('promptLibrary.exportFailed', { error: msg }));
     }
   };
 
   const handleImportFile = async (file: File) => {
     try {
       const result = await importFromFile(file);
-      setImportMessage(`成功导入 ${result.imported} 条，跳过 ${result.skipped} 条`);
+      setImportMessage(t('promptLibrary.importSuccess', { imported: result.imported, skipped: result.skipped }));
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Unknown error';
-      setImportMessage(`导入失败：${msg}`);
+      setImportMessage(t('promptLibrary.importFailed', { error: msg }));
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
@@ -265,7 +265,7 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                 onClick={startImport}
               >
                 <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
-                导入
+                {t('promptLibrary.import')}
               </button>
               <button
                 type="button"
@@ -273,7 +273,7 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                 onClick={() => void handleExport()}
               >
                 <Download className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
-                导出
+                {t('promptLibrary.export')}
               </button>
               <button
                 type="button"
@@ -409,12 +409,12 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
             />
           </div>
           <div className="mb-2">
-            <div className="mb-1 text-[12px] text-[#6b7280]">Tags</div>
+            <div className="mb-1 text-[12px] text-[#6b7280]">{t('promptLibrary.tagsLabel')}</div>
             <input
               className="w-full rounded-lg border border-[#e5e0d8] bg-white px-2 py-2 text-[12px] outline-none focus:border-[#c96442]"
               value={draft.tags}
               onChange={(e) => setDraft((v) => ({ ...v, tags: e.target.value }))}
-              placeholder="tag1, tag2"
+              placeholder={t('promptLibrary.tagsPlaceholder')}
             />
           </div>
           <div className="mb-3">
