@@ -5,9 +5,7 @@
  */
 
 import { useEffect, useState } from 'react';
-
-const SIDEBAR_WIDTH_SELECTOR =
-  'div.flex.min-h-0.w-full.overflow-x-clip.overflow-y-auto.relative > div.shrink-0';
+import { SIDEBAR_WIDTH_TARGET_SELECTOR } from '@src/constants/selectors';
 
 /**
  * Reads current sidebar open state from claude.ai DOM.
@@ -17,7 +15,7 @@ const SIDEBAR_WIDTH_SELECTOR =
  *   - 2026-03-18 [Qiuner] Added width-based predicate for open/collapsed detection.
  */
 const getSidebarOpen = (): boolean => {
-  const el = document.querySelector(SIDEBAR_WIDTH_SELECTOR);
+  const el = document.querySelector(SIDEBAR_WIDTH_TARGET_SELECTOR);
   if (!(el instanceof HTMLElement)) return true;
   return el.getBoundingClientRect().width > 100;
 };
@@ -62,7 +60,7 @@ export const useSidebarOpen = (): boolean => {
     };
 
     const tryAttach = (): boolean => {
-      const el = document.querySelector(SIDEBAR_WIDTH_SELECTOR);
+      const el = document.querySelector(SIDEBAR_WIDTH_TARGET_SELECTOR);
       if (!(el instanceof HTMLElement)) return false;
       attach(el);
       return true;

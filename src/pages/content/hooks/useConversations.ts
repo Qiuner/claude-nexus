@@ -7,6 +7,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Conversation } from '@src/types/conversation';
 import { estimateIsDarkBackground, extractConversationIdFromHref, findNavUl, scanConversations } from '@pages/content/utils/dom';
+import {
+  CONVERSATION_LINK_SELECTOR,
+  CONVERSATION_LIST_ITEM_SELECTOR,
+  SIDEBAR_NAV_SELECTOR,
+  SIDEBAR_RECENTS_SECTION_SELECTOR,
+} from '@src/constants/selectors';
 
 const INJECTED_CONTAINER_ID = '__claude_nexus_folder_manager__';
 
@@ -25,13 +31,13 @@ const restoreConversationListItem = (li: HTMLLIElement) => {
 };
 
 const applyConversationVisibility = (ul: HTMLUListElement, hiddenIds: Set<string>) => {
-  const anchors = Array.from(ul.querySelectorAll('a[href^="/chat/"]'));
+  const anchors = Array.from(ul.querySelectorAll(CONVERSATION_LINK_SELECTOR));
   for (const a of anchors) {
     if (!(a instanceof HTMLAnchorElement)) continue;
     const href = a.getAttribute('href') || '';
     const id = extractConversationIdFromHref(href);
     if (!id) continue;
-    const li = a.closest('li');
+    const li = a.closest(CONVERSATION_LIST_ITEM_SELECTOR);
     if (!li || !(li instanceof HTMLLIElement)) continue;
     if (hiddenIds.has(id)) hideConversationListItem(li);
     else restoreConversationListItem(li);
@@ -104,7 +110,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
       container.id = INJECTED_CONTAINER_ID;
       container.className = 'px-2 pt-2 pb-1';
 
-      const recentsSection = document.querySelector('nav div.flex-1.relative');
+      const recentsSection = document.querySelector(SIDEBAR_RECENTS_SECTION_SELECTOR);
       if (recentsSection instanceof HTMLElement) {
         recentsSection.insertAdjacentElement('beforebegin', container);
         setPortalContainer(container);
@@ -140,7 +146,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
   }, []);
 
   useEffect(() => {
-    const el = navUlEl?.closest('nav') ?? navUlEl?.parentElement ?? null;
+    const el = navUlEl?.closest(SIDEBAR_NAV_SELECTOR) ?? navUlEl?.parentElement ?? null;
     const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)')?.matches ?? true;
     if (!el) return setIsDarkTheme(prefersDark);
     const bg = window.getComputedStyle(el).backgroundColor;
@@ -158,7 +164,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
       for (const c of conversations) nextIndex[c.id] = c;
       setConversationIndex(nextIndex);
 
-      const anchors = Array.from(ul.querySelectorAll('a[href^="/chat/"]'));
+      const anchors = Array.from(ul.querySelectorAll(CONVERSATION_LINK_SELECTOR));
       for (const a of anchors) {
         if (!(a instanceof HTMLAnchorElement)) continue;
         if (!a.hasAttribute('draggable')) a.setAttribute('draggable', 'true');
@@ -185,7 +191,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
 
     const handleDragStart = (e: DragEvent) => {
       const target = e.target instanceof Element ? e.target : null;
-      const a = target?.closest?.('a[href^="/chat/"]');
+      const a = target?.closest?.(CONVERSATION_LINK_SELECTOR);
       if (!a || !(a instanceof HTMLAnchorElement)) return;
       const href = a.getAttribute('href') || '';
       const id = extractConversationIdFromHref(href);
@@ -197,7 +203,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
 
     const handleContextMenu = (e: MouseEvent) => {
       const target = e.target instanceof Element ? e.target : null;
-      const a = target?.closest?.('a[href^="/chat/"]');
+      const a = target?.closest?.(CONVERSATION_LINK_SELECTOR);
       if (!a || !(a instanceof HTMLAnchorElement)) return;
       const href = a.getAttribute('href') || '';
       const id = extractConversationIdFromHref(href);

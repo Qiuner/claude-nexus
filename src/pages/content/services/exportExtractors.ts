@@ -5,13 +5,21 @@
  */
 
 import type { ExportExtractionResult, ExportMessage, ExportRole } from './exportTypes';
+import {
+  ASSISTANT_COPY_BUTTON_SELECTOR,
+  ASSISTANT_MESSAGE_SELECTOR,
+  CODE_BLOCK_CONTENT_SELECTOR,
+  MESSAGE_RENDER_WRAPPER_SELECTOR,
+  TOOLBAR_ACTIONS_SELECTOR,
+  USER_MESSAGE_SELECTOR,
+} from '@src/constants/selectors';
 
-const SELECTORS = {
-  toolbarActions: '[data-testid="wiggle-controls-actions"]',
-  messageWrapper: '[data-test-render-count]',
-  userMessage: '[data-testid="user-message"]',
-  assistantMessage: 'div.font-claude-response',
-  assistantCopyButton: 'button[data-testid="action-bar-copy"]',
+export const EXPORT_SELECTORS = {
+  toolbarActions: TOOLBAR_ACTIONS_SELECTOR,
+  messageWrapper: MESSAGE_RENDER_WRAPPER_SELECTOR,
+  userMessage: USER_MESSAGE_SELECTOR,
+  assistantMessage: ASSISTANT_MESSAGE_SELECTOR,
+  assistantCopyButton: ASSISTANT_COPY_BUTTON_SELECTOR,
 } as const;
 
 type Candidate = {
@@ -65,7 +73,7 @@ const extractBlock = (node: Node, listDepth: number): string => {
   const tag = node.tagName.toLowerCase();
 
   if (tag === 'pre') {
-    const code = node.querySelector('code');
+    const code = node.querySelector(CODE_BLOCK_CONTENT_SELECTOR);
     const text = (code?.textContent ?? node.textContent ?? '').replace(/\n$/, '');
     return `\n\`\`\`\n${text}\n\`\`\`\n`;
   }
@@ -123,10 +131,10 @@ export const extractMarkdownFromDom = (root: Element): string => {
 };
 
 const tryReadAssistantFromClipboard = async (assistantEl: Element): Promise<string | null> => {
-  const wrapper = assistantEl.closest(SELECTORS.messageWrapper);
+  const wrapper = assistantEl.closest(EXPORT_SELECTORS.messageWrapper);
   if (!(wrapper instanceof HTMLElement)) return null;
 
-  const copyButton = wrapper.querySelector(SELECTORS.assistantCopyButton);
+  const copyButton = wrapper.querySelector(EXPORT_SELECTORS.assistantCopyButton);
   if (!(copyButton instanceof HTMLButtonElement)) return null;
 
   try {
@@ -144,10 +152,10 @@ const tryReadAssistantFromClipboard = async (assistantEl: Element): Promise<stri
 const buildCandidates = (): Candidate[] => {
   const candidates: Candidate[] = [];
 
-  const userNodes = Array.from(document.querySelectorAll(SELECTORS.userMessage));
+  const userNodes = Array.from(document.querySelectorAll(EXPORT_SELECTORS.userMessage));
   for (const el of userNodes) candidates.push({ role: 'user', element: el, position: getElementTop(el) });
 
-  const assistantNodes = Array.from(document.querySelectorAll(SELECTORS.assistantMessage));
+  const assistantNodes = Array.from(document.querySelectorAll(EXPORT_SELECTORS.assistantMessage));
   for (const el of assistantNodes) candidates.push({ role: 'assistant', element: el, position: getElementTop(el) });
 
   return candidates.sort((a, b) => a.position - b.position);
@@ -187,6 +195,4 @@ export const extractConversationMessages = async (): Promise<ExportExtractionRes
 
   return { messages, failedMessages };
 };
-
-export const EXPORT_SELECTORS = SELECTORS;
 

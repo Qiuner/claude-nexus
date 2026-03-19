@@ -6,6 +6,7 @@
 
 import { createRoot } from 'react-dom/client';
 import { i18n, initI18n, LANGUAGE_CHANGE_MESSAGE_TYPE } from '@src/services/i18n';
+import { APP_ROOT_ID, APP_ROOT_SELECTOR } from '@src/constants/selectors';
 import './style.css';
 import FolderManager from './components/FolderManager';
 import Timeline from './components/Timeline';
@@ -25,10 +26,10 @@ const mount = async () => {
   });
 
   const div = document.createElement('div');
-  div.id = '__root';
+  div.id = APP_ROOT_ID;
   document.body.appendChild(div);
 
-  const rootContainer = document.querySelector('#__root');
+  const rootContainer = document.querySelector(APP_ROOT_SELECTOR);
   if (!rootContainer) throw new Error("Can't find Content root element");
   const root = createRoot(rootContainer);
   root.render(

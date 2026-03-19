@@ -3,6 +3,14 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  AUTOSCROLL_CONTAINER_SELECTOR,
+  CONVERSATION_LINK_SELECTOR,
+  MESSAGE_RENDER_WRAPPER_SELECTOR,
+  SIDEBAR_FALLBACK_CONTAINER_SELECTOR,
+  SIDEBAR_NAV_SELECTOR,
+  USER_MESSAGE_SELECTOR,
+} from '@src/constants/selectors';
 
 type MessageType = 'user';
 
@@ -28,9 +36,9 @@ const SIDEBAR_RESYNC_DEBOUNCE_MS = 800;
 const getChatId = (): string => window.location.pathname.split('/chat/')?.[1] ?? '';
 
 const findSidebarContainer = (): HTMLElement | null => {
-  const nav = document.querySelector('nav');
+  const nav = document.querySelector(SIDEBAR_NAV_SELECTOR);
   if (nav instanceof HTMLElement) return nav;
-  const fallback = document.querySelector('div.flex-1.relative');
+  const fallback = document.querySelector(SIDEBAR_FALLBACK_CONTAINER_SELECTOR);
   return fallback instanceof HTMLElement ? fallback : null;
 };
 
@@ -38,36 +46,36 @@ const mutationHasChatLink = (mutations: MutationRecord[]): boolean => {
   for (const m of mutations) {
     for (const node of Array.from(m.addedNodes)) {
       if (!(node instanceof HTMLElement)) continue;
-      if (node.matches('a[href^="/chat/"]')) return true;
-      if (node.querySelector('a[href^="/chat/"]')) return true;
+      if (node.matches(CONVERSATION_LINK_SELECTOR)) return true;
+      if (node.querySelector(CONVERSATION_LINK_SELECTOR)) return true;
     }
     for (const node of Array.from(m.removedNodes)) {
       if (!(node instanceof HTMLElement)) continue;
-      if (node.matches('a[href^="/chat/"]')) return true;
-      if (node.querySelector('a[href^="/chat/"]')) return true;
+      if (node.matches(CONVERSATION_LINK_SELECTOR)) return true;
+      if (node.querySelector(CONVERSATION_LINK_SELECTOR)) return true;
     }
   }
   return false;
 };
 
 const findScrollContainer = (): HTMLElement | null => {
-  const el = document.querySelector('[data-autoscroll-container="true"]');
+  const el = document.querySelector(AUTOSCROLL_CONTAINER_SELECTOR);
   return el instanceof HTMLElement ? el : null;
 };
 
 const getMessageType = (wrapper: Element): MessageType | null => {
-  if (wrapper.querySelector('[data-testid="user-message"]')) return 'user';
+  if (wrapper.querySelector(USER_MESSAGE_SELECTOR)) return 'user';
   return null;
 };
 
 const extractUserText = (wrapper: Element): string => {
-  const el = wrapper.querySelector('[data-testid="user-message"]');
+  const el = wrapper.querySelector(USER_MESSAGE_SELECTOR);
   const text = el?.textContent ?? '';
   return text.replace(/\s+/g, ' ').trim();
 };
 
 const buildNodes = (scrollContainer: HTMLElement): TimelineNode[] => {
-  const wrappers = Array.from(scrollContainer.querySelectorAll('[data-test-render-count]'));
+  const wrappers = Array.from(scrollContainer.querySelectorAll(MESSAGE_RENDER_WRAPPER_SELECTOR));
   const nodes: TimelineNode[] = [];
 
   for (const [index, wrapper] of wrappers.entries()) {

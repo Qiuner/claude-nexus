@@ -11,8 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { useExport } from '../../hooks/useExport';
 import type { ExportFormat } from '../../services/exportFormatters';
 import { EXPORT_SELECTORS } from '../../services/exportExtractors';
+import { EXPORT_BUTTON_ROOT_ID, EXPORT_BUTTON_ROOT_SELECTOR } from '@src/constants/selectors';
 
-const EXPORT_ROOT_ID = 'claude-nexus-export-button-root';
 const INIT_FLAG = '__claudeNexusExportInit__';
 const HISTORY_PATCH_FLAG = '__claudeNexusHistoryPatch__';
 
@@ -159,11 +159,11 @@ const mountIntoToolbar = (): boolean => {
   const container = document.querySelector(EXPORT_SELECTORS.toolbarActions);
   if (!(container instanceof HTMLElement)) return false;
 
-  const existing = container.querySelector(`#${EXPORT_ROOT_ID}`);
+  const existing = container.querySelector(EXPORT_BUTTON_ROOT_SELECTOR);
   if (existing instanceof HTMLElement) return true;
 
   const host = document.createElement('div');
-  host.id = EXPORT_ROOT_ID;
+  host.id = EXPORT_BUTTON_ROOT_ID;
   container.appendChild(host);
 
   createRoot(host).render(<ExportButton />);

@@ -8,6 +8,7 @@ import '@pages/popup/index.css';
 import '@assets/styles/tailwind.css';
 import Popup from '@pages/popup/Popup';
 import { initI18n } from '@src/services/i18n';
+import { APP_ROOT_SELECTOR } from '@src/constants/selectors';
 
 /**
  * Initializes i18n and mounts the popup React application.
@@ -15,7 +16,7 @@ import { initI18n } from '@src/services/i18n';
  */
 async function init() {
   await initI18n();
-  const rootContainer = document.querySelector("#__root");
+  const rootContainer = document.querySelector(APP_ROOT_SELECTOR);
   if (!rootContainer) throw new Error("Can't find Popup root element");
   const root = createRoot(rootContainer);
   root.render(<Popup />);

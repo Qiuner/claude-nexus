@@ -6,9 +6,14 @@
 
 import type React from 'react';
 import type { Conversation } from '@src/types/conversation';
+import {
+  CONVERSATION_LINK_SELECTOR,
+  CONVERSATION_TITLE_SELECTOR,
+  SIDEBAR_CONVERSATION_LIST_SELECTOR,
+} from '@src/constants/selectors';
 
 export const findNavUl = (): HTMLUListElement | null => {
-  const el = document.querySelector('nav ul');
+  const el = document.querySelector(SIDEBAR_CONVERSATION_LIST_SELECTOR);
   if (!el) return null;
   if (el instanceof HTMLUListElement) return el;
   return null;
@@ -21,13 +26,13 @@ export const extractConversationIdFromHref = (href: string) => {
 };
 
 export const getConversationTitleFromAnchor = (a: HTMLAnchorElement) => {
-  const span = a.querySelector('span.truncate');
+  const span = a.querySelector(CONVERSATION_TITLE_SELECTOR);
   const text = (span?.textContent || a.textContent || '').trim();
   return text;
 };
 
 export const scanConversations = (ul: HTMLUListElement): Conversation[] => {
-  const anchors = Array.from(ul.querySelectorAll('a[href^="/chat/"]'));
+  const anchors = Array.from(ul.querySelectorAll(CONVERSATION_LINK_SELECTOR));
   const metas: Conversation[] = [];
 
   for (const a of anchors) {

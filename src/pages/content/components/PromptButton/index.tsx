@@ -10,8 +10,14 @@ import { BookText, Download, Pencil, Plus, Search, Trash2, X } from 'lucide-reac
 import { useTranslation } from 'react-i18next';
 import { usePromptLibrary } from '../../hooks/usePromptLibrary';
 import type { Prompt } from '@src/types/prompt';
+import {
+  CHAT_INPUT_LEFT_ACTIONS_SELECTOR,
+  CHAT_INPUT_SELECTOR,
+  CHAT_INPUT_TOOLBAR_PARENT_SELECTOR,
+  PROMPT_BUTTON_ROOT_ID,
+  PROMPT_BUTTON_ROOT_SELECTOR,
+} from '@src/constants/selectors';
 
-const PROMPT_ROOT_ID = 'claude-nexus-prompt-button-root';
 const INIT_FLAG = '__claudeNexusPromptInit__';
 const HISTORY_PATCH_FLAG = '__claudeNexusHistoryPatch__';
 
@@ -24,7 +30,7 @@ type Draft = {
 };
 
 const getChatInputElement = (): HTMLElement | null => {
-  const el = document.querySelector('div[data-testid="chat-input"]');
+  const el = document.querySelector(CHAT_INPUT_SELECTOR);
   return el instanceof HTMLElement ? el : null;
 };
 
@@ -33,13 +39,13 @@ const getChatInputElement = (): HTMLElement | null => {
  * Uses relative positioning as claude.ai DOM is SPA-driven and classnames can shift.
  */
 const findLeftButtonsContainer = (): HTMLElement | null => {
-  const input = document.querySelector('div[data-testid="chat-input"]');
+  const input = document.querySelector(CHAT_INPUT_SELECTOR);
   if (!(input instanceof HTMLElement)) return null;
 
-  const container = input.closest('div.flex.flex-col');
+  const container = input.closest(CHAT_INPUT_TOOLBAR_PARENT_SELECTOR);
   if (!container) return null;
 
-  const leftButtons = container.querySelector('div.relative.flex-1.flex.items-center.shrink.min-w-0.gap-1');
+  const leftButtons = container.querySelector(CHAT_INPUT_LEFT_ACTIONS_SELECTOR);
   return leftButtons instanceof HTMLElement ? leftButtons : null;
 };
 
@@ -515,11 +521,11 @@ const mountIntoInputToolbar = (): boolean => {
   const container = findLeftButtonsContainer();
   if (!container) return false;
 
-  const existing = container.querySelector(`#${PROMPT_ROOT_ID}`);
+  const existing = container.querySelector(PROMPT_BUTTON_ROOT_SELECTOR);
   if (existing instanceof HTMLElement) return true;
 
   const host = document.createElement('div');
-  host.id = PROMPT_ROOT_ID;
+  host.id = PROMPT_BUTTON_ROOT_ID;
   container.appendChild(host);
 
   createRoot(host).render(<PromptButton />);
