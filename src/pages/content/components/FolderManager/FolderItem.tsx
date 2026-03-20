@@ -35,6 +35,7 @@ type Props = {
   onDelete: (folderId: string, anchorRect: DOMRect) => void;
   onToggleExpanded: (folderId: string) => void;
   onDropConversationToFolder: (folderId: string, conversationId: string) => void;
+  onConversationContextMenu?: (payload: { x: number; y: number; conversationId: string }) => void;
 };
 
 export default function FolderItem({
@@ -49,6 +50,7 @@ export default function FolderItem({
   onDelete,
   onToggleExpanded,
   onDropConversationToFolder,
+  onConversationContextMenu,
 }: Props) {
   const { t } = useTranslation();
   const count = folder.conversationIds.length;
@@ -72,6 +74,12 @@ export default function FolderItem({
         className={`block truncate rounded-md pl-8 pr-2 py-1.5 text-sm transition-colors ${theme.rootText} ${theme.hoverBg}`}
         tabIndex={0}
         aria-label={t('conversation.openAria', { title })}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          const href = (e.currentTarget as HTMLAnchorElement).href;
+          void href;
+          onConversationContextMenu?.({ x: e.clientX, y: e.clientY, conversationId });
+        }}
       >
         {title}
       </a>

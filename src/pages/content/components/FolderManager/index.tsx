@@ -2,7 +2,6 @@
  * Connects FolderManager hooks and composes the UI components (no modal JSX).
  */
 
-import type React from 'react';
 import { useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +10,6 @@ import type { Folder } from '@src/types/folder';
 import { useConversations } from '../../hooks/useConversations';
 import { useFolders } from '../../hooks/useFolders';
 import { useSidebarOpen } from '../../hooks/useSidebarOpen';
-import { getConversationIdFromDragEvent } from '../../utils/dom';
 import FolderList from './FolderList';
 import { FolderManagerModals } from './FolderManagerModals';
 
@@ -85,10 +83,11 @@ export default function FolderManager() {
     toggleExpanded,
     moveConversationToFolder,
   } = useFolders();
+  const handleConversationContextMenu = (payload: { x: number; y: number; conversationId: string }) => setContextMenu(payload);
 
   const { portalContainer, conversationIndex, isDarkTheme } = useConversations({
     hiddenConversationIds: allConversationIdsInFolders,
-    onConversationContextMenu: (payload) => setContextMenu(payload),
+    onConversationContextMenu: handleConversationContextMenu,
   });
 
   const theme = useMemo(() => getThemeTokens(isDarkTheme), [isDarkTheme]);
@@ -130,13 +129,6 @@ export default function FolderManager() {
 
   const cancelDelete = () => {
     setPendingDelete(null);
-  };
-
-  const handleUnfiledDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const conversationId = getConversationIdFromDragEvent(e);
-    if (!conversationId) return;
-    void moveConversationToFolder(conversationId, null);
   };
 
   const handleFolderDrop = (folderId: string, conversationId: string) => {
@@ -215,16 +207,8 @@ export default function FolderManager() {
           onDelete={handleDeleteFolder}
           onToggleExpanded={(folderId) => void toggleExpanded(folderId)}
           onDropConversationToFolder={handleFolderDrop}
+          onConversationContextMenu={handleConversationContextMenu}
         />
-
-        <div
-          className={`mt-2 rounded-lg border border-dashed bg-transparent px-2 py-2 text-center text-xs transition-colors ${theme.border} ${theme.subtleText} ${theme.hoverBg}`}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleUnfiledDrop}
-          aria-label={t('folders.unfiledDropAria')}
-        >
-          {t('folders.unfiledLabel')}
-        </div>
       </div>
 
       <FolderManagerModals

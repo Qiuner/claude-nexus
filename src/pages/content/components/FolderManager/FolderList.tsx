@@ -32,6 +32,7 @@ type Props = {
   onDelete: (folderId: string, anchorRect: DOMRect) => void;
   onToggleExpanded: (folderId: string) => void;
   onDropConversationToFolder: (folderId: string, conversationId: string) => void;
+  onConversationContextMenu?: (payload: { x: number; y: number; conversationId: string }) => void;
 };
 
 const FolderList = ({
@@ -46,6 +47,7 @@ const FolderList = ({
   onDelete,
   onToggleExpanded,
   onDropConversationToFolder,
+  onConversationContextMenu,
 }: Props) => {
   return (
     <div className="space-y-[2px]">
@@ -63,6 +65,7 @@ const FolderList = ({
           onDelete={onDelete}
           onToggleExpanded={onToggleExpanded}
           onDropConversationToFolder={onDropConversationToFolder}
+          onConversationContextMenu={onConversationContextMenu}
         />
       ))}
     </div>
