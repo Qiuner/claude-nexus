@@ -49,7 +49,8 @@
   "popup": {
     "title": "Settings",
     "language": "Language",
-    "languageZh": "中文",
+    "languageZh": "简体中文",
+    "languageZhTW": "繁體中文",
     "languageEn": "English",
     "hint": "Language changes apply to the current claude.ai tab."
   },
@@ -91,7 +92,14 @@
     "titleLabel": "Title",
     "titlePlaceholder": "e.g. Summarize this conversation",
     "contentLabel": "Content",
-    "contentPlaceholder": "Write your prompt here..."
+    "contentPlaceholder": "Write your prompt here...",
+    "tagsLabel": "Tags",
+    "tagsPlaceholder": "tag1, tag2",
+    "import": "Import",
+    "export": "Export",
+    "importSuccess": "Imported {{imported}}, skipped {{skipped}}",
+    "importFailed": "Import failed: {{error}}",
+    "exportFailed": "Export failed: {{error}}"
   },
   "widthControl": {
     "title": "Chat width",

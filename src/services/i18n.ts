@@ -7,6 +7,7 @@ import { initReactI18next } from 'react-i18next';
 import type { Language } from '@src/types/settings';
 import enTranslation from '@locales/en/translation.json';
 import zhTranslation from '@locales/zh/translation.json';
+import zhTWTranslation from '@locales/zh-TW/translation.json';
 
 export const i18n = i18next;
 
@@ -21,7 +22,7 @@ type StoredLanguage = Language | undefined;
  * @returns Language | undefined
  */
 const parseLanguage = (value: unknown): StoredLanguage => {
-  if (value === 'en' || value === 'zh') return value;
+  if (value === 'en' || value === 'zh' || value === 'zh-TW') return value;
   return undefined;
 };
 
@@ -31,6 +32,7 @@ const parseLanguage = (value: unknown): StoredLanguage => {
  */
 const detectBrowserLanguage = (): Language => {
   const lang = (navigator.languages?.[0] || navigator.language || '').toLowerCase();
+  if (lang === 'zh-tw' || lang === 'zh-hant' || lang.startsWith('zh-hant-')) return 'zh-TW';
   if (lang.startsWith('zh')) return 'zh';
   return 'en';
 };
@@ -87,6 +89,7 @@ export const initI18n = async () => {
       resources: {
         en: { translation: enTranslation },
         zh: { translation: zhTranslation },
+        'zh-TW': { translation: zhTWTranslation },
       },
       lng: initialLanguage,
       fallbackLng: 'en',

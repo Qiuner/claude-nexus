@@ -49,7 +49,8 @@
   "popup": {
     "title": "设置",
     "language": "语言",
-    "languageZh": "中文",
+    "languageZh": "简体中文",
+    "languageZhTW": "繁體中文",
     "languageEn": "English",
     "hint": "语言切换会应用到当前打开的 claude.ai 页面。"
   },
@@ -91,7 +92,14 @@
     "titleLabel": "标题",
     "titlePlaceholder": "例如：总结这段对话",
     "contentLabel": "内容",
-    "contentPlaceholder": "在这里编写提示词…"
+    "contentPlaceholder": "在这里编写提示词…",
+    "tagsLabel": "标签",
+    "tagsPlaceholder": "标签1, 标签2",
+    "import": "导入",
+    "export": "导出",
+    "importSuccess": "成功导入 {{imported}} 条，跳过 {{skipped}} 条",
+    "importFailed": "导入失败：{{error}}",
+    "exportFailed": "导出失败：{{error}}"
   },
   "widthControl": {
     "title": "对话宽度",

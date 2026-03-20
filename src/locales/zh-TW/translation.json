@@ -1,0 +1,111 @@
+{
+  "common": {
+    "save": "儲存",
+    "cancel": "取消",
+    "create": "建立",
+    "delete": "刪除",
+    "rename": "重新命名",
+    "reset": "重設"
+  },
+  "folders": {
+    "title": "資料夾",
+    "newFolderAria": "建立資料夾",
+    "newButton": "新增",
+    "folderName": "資料夾名稱",
+    "createFolderAria": "建立資料夾",
+    "cancelCreateAria": "取消建立資料夾",
+    "deleteConfirm": "確定要刪除此資料夾嗎？資料夾內的對話將變為未歸類。",
+    "deleteTitle": "刪除資料夾",
+    "unfiledDropAria": "拖曳至此處以移出資料夾",
+    "unfiledLabel": "未歸類（拖曳至此移出）"
+  },
+  "menu": {
+    "closeAria": "關閉對話操作選單",
+    "labelAria": "對話操作選單",
+    "escToCloseAria": "按 Esc 關閉選單",
+    "moveInto": "移入資料夾",
+    "emptyFolders": "尚無資料夾",
+    "moveOut": "移出資料夾"
+  },
+  "folderItem": {
+    "folderAria": "資料夾：{{name}}",
+    "collapse": "收合資料夾",
+    "expand": "展開資料夾",
+    "renameAria": "重新命名資料夾",
+    "deleteAria": "刪除資料夾",
+    "dropHint": "將對話拖曳至此資料夾"
+  },
+  "conversation": {
+    "fallbackTitle": "對話 {{id}}",
+    "openAria": "開啟對話：{{title}}",
+    "untitled": "未命名對話"
+  },
+  "storage": {
+    "unnamedFolder": "未命名資料夾",
+    "unavailable": "chrome.storage.local 無法使用",
+    "unknownError": "未知錯誤",
+    "contextInvalidated": "偵測到擴充功能上下文已失效：通常是擴充功能剛被重新載入或更新，重新整理頁面即可恢復"
+  },
+  "popup": {
+    "title": "設定",
+    "language": "語言",
+    "languageZh": "简体中文",
+    "languageZhTW": "繁體中文",
+    "languageEn": "English",
+    "hint": "語言切換會套用至目前開啟的 claude.ai 頁面。"
+  },
+  "floatBall": {
+    "width": "對話寬度"
+  },
+  "export": {
+    "title": "匯出對話",
+    "buttonLabel": "匯出",
+    "buttonAria": "開啟匯出選單",
+    "closeAria": "關閉匯出選單",
+    "formatLabel": "格式",
+    "formatMarkdown": "Markdown",
+    "formatJson": "JSON",
+    "exportButton": "匯出",
+    "statusExporting": "匯出中…",
+    "statusSuccess": "已匯出 {{count}} 則訊息",
+    "statusFailed": "匯出失敗",
+    "statusFailedCount": "{{count}} 則失敗"
+  },
+  "promptLibrary": {
+    "title": "提示詞庫",
+    "buttonLabel": "提示詞",
+    "buttonAria": "開啟提示詞庫",
+    "closeAria": "關閉提示詞庫",
+    "searchPlaceholder": "搜尋提示詞…",
+    "filterAll": "全部",
+    "new": "新增",
+    "newAria": "建立新提示詞",
+    "loading": "載入中…",
+    "empty": "尚無提示詞，點選「新增」開始建立。",
+    "insert": "插入",
+    "edit": "編輯",
+    "delete": "刪除",
+    "insertAria": "插入提示詞",
+    "editAria": "編輯提示詞",
+    "deleteAria": "刪除提示詞",
+    "deleteConfirm": "確定刪除「{{title}}」嗎？",
+    "titleLabel": "標題",
+    "titlePlaceholder": "例如：摘要這段對話",
+    "contentLabel": "內容",
+    "contentPlaceholder": "在此撰寫提示詞…",
+    "tagsLabel": "標籤",
+    "tagsPlaceholder": "標籤1, 標籤2",
+    "import": "匯入",
+    "export": "匯出",
+    "importSuccess": "成功匯入 {{imported}} 筆，略過 {{skipped}} 筆",
+    "importFailed": "匯入失敗：{{error}}",
+    "exportFailed": "匯出失敗：{{error}}"
+  },
+  "widthControl": {
+    "title": "對話寬度",
+    "valueLabel": "寬度",
+    "openAria": "開啟對話寬度調整",
+    "closeAria": "關閉對話寬度調整",
+    "sliderAria": "調整對話寬度"
+  }
+}
