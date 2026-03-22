@@ -3,7 +3,7 @@
  * Expanding Sidebar Style with Custom React Portal Tooltips and Dynamic Scroll Gradients.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTimeline } from '../../hooks/useTimeline';
 
@@ -34,27 +34,32 @@ export default function Timeline() {
   /**
    * Auto-scrolls the timeline container so the active node stays visible.
    */
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || activeIndex < 0) return;
-
-    const nodeEls = container.querySelectorAll<HTMLElement>('[data-timeline-node]');
-    const activeEl = nodeEls[activeIndex];
-    if (!activeEl) return;
-
-    const containerRect = container.getBoundingClientRect();
-    const nodeRect = activeEl.getBoundingClientRect();
-    const nodeCenter = nodeRect.top + nodeRect.height / 2;
-    const containerCenter = containerRect.top + containerRect.height / 2;
-
-    const tolerance = containerRect.height * 0.3;
-    if (Math.abs(nodeCenter - containerCenter) > tolerance) {
-      const targetScroll =
-        activeEl.offsetTop - container.clientHeight / 2 + activeEl.clientHeight / 2;
-      container.scrollTo({ top: Math.max(0, targetScroll), behavior: 'instant' });
-    }
+  useLayoutEffect(() => {
+    if (activeIndex < 0) return;
     
-    setTimeout(checkScroll, 350);
+    // Double frame buffer ensures DOM height layout reflow completed
+    requestAnimationFrame(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const nodeEls = container.querySelectorAll<HTMLElement>('[data-timeline-node]');
+      const activeEl = nodeEls[activeIndex];
+      if (!activeEl) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const nodeRect = activeEl.getBoundingClientRect();
+      const nodeCenter = nodeRect.top + nodeRect.height / 2;
+      const containerCenter = containerRect.top + containerRect.height / 2;
+
+      const tolerance = containerRect.height * 0.3;
+      if (Math.abs(nodeCenter - containerCenter) > tolerance) {
+        const targetScroll =
+          activeEl.offsetTop - container.clientHeight / 2 + activeEl.clientHeight / 2;
+        container.scrollTo({ top: Math.max(0, targetScroll), behavior: 'instant' });
+      }
+      
+      setTimeout(checkScroll, 100);
+    });
   }, [activeIndex]);
 
   const handleScroll = () => {
@@ -62,6 +67,19 @@ export default function Timeline() {
     if (hoveredNode) setHoveredNode(null);
     checkScroll();
   };
+
+  const maskStyle = useMemo(() => ({
+    maskImage: `linear-gradient(to bottom, ${
+      scrollState.isTop ? 'black 0px' : 'transparent 0px'
+    }, black 40px, black calc(100% - 40px), ${
+      scrollState.isBottom ? 'black 100%' : 'transparent 100%'
+    })`,
+    WebkitMaskImage: `linear-gradient(to bottom, ${
+      scrollState.isTop ? 'black 0px' : 'transparent 0px'
+    }, black 40px, black calc(100% - 40px), ${
+      scrollState.isBottom ? 'black 100%' : 'transparent 100%'
+    })`
+  }), [scrollState.isTop, scrollState.isBottom]);
 
   if (nodes.length === 0) return null;
 
@@ -101,7 +119,11 @@ export default function Timeline() {
           width: 0;
         }
       `}</style>
-      <div className="fixed right-3 top-[10vh] bottom-[10vh] z-50 flex flex-col justify-center pointer-events-none min-h-0">
+      <div 
+        role="navigation" 
+        aria-label="Claude Context Timeline"
+        className="fixed right-3 top-[10vh] bottom-[10vh] z-50 flex flex-col justify-center pointer-events-none min-h-0"
+      >
         <div
           onMouseEnter={() => setIsExpanded(true)}
           onMouseLeave={() => {
@@ -117,34 +139,34 @@ export default function Timeline() {
         >
           <div
             ref={containerRef}
+            role="list"
             onScroll={handleScroll}
             className={`custom-scrollbar flex flex-col py-4 overflow-x-hidden max-h-[320px] min-h-0 w-full ${
               isExpanded ? 'overflow-y-auto' : 'overflow-y-hidden'
             }`}
-            style={{
-              maskImage: `linear-gradient(to bottom, ${
-                scrollState.isTop ? 'black 0px' : 'transparent 0px'
-              }, black 40px, black calc(100% - 40px), ${
-                scrollState.isBottom ? 'black 100%' : 'transparent 100%'
-              })`,
-              WebkitMaskImage: `linear-gradient(to bottom, ${
-                scrollState.isTop ? 'black 0px' : 'transparent 0px'
-              }, black 40px, black calc(100% - 40px), ${
-                scrollState.isBottom ? 'black 100%' : 'transparent 100%'
-              })`
-            }}
+            style={maskStyle}
           >
             {nodes.map((n, i) => {
               const isActive = i === activeIndex;
               return (
                 <div
                   key={n.id}
-                  data-timeline-node
-                  title=""
-                  className={`flex items-center justify-end min-h-[26px] px-3 mx-2 my-px cursor-pointer transition-colors duration-200 shrink-0 rounded-md ${
+                    role="button"
+                    tabIndex={0}
+                    aria-current={isActive ? 'true' : undefined}
+                    aria-label={n.text || 'Timeline node'}
+                    data-timeline-node
+                    title=""
+                    className={`flex items-center justify-end min-h-[26px] px-3 mx-2 my-px cursor-pointer transition-colors duration-200 shrink-0 rounded-md ${
                     isExpanded ? (isActive ? 'bg-zinc-200/80 dark:bg-white/10' : 'hover:bg-zinc-200/50 dark:hover:bg-white/5') : ''
                   }`}
                   onClick={() => scrollToNode(i)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      scrollToNode(i);
+                    }
+                  }}
                   onMouseEnter={(e) => {
                     if (isExpanded) {
                       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
