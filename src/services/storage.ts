@@ -29,14 +29,13 @@ const parsePrompt = (value: unknown): Prompt | undefined => {
   if (!value || typeof value !== 'object') return undefined;
   const v = value as Partial<Prompt>;
   if (typeof v.id !== 'string' || !v.id) return undefined;
-  if (typeof v.title !== 'string') return undefined;
   if (typeof v.content !== 'string') return undefined;
   if (v.tags !== undefined) {
     if (!Array.isArray(v.tags)) return undefined;
     if (!v.tags.every((t) => typeof t === 'string')) return undefined;
   }
   if (typeof v.createdAt !== 'number' || Number.isNaN(v.createdAt) || !Number.isFinite(v.createdAt)) return undefined;
-  return { id: v.id, title: v.title, content: v.content, tags: v.tags, createdAt: v.createdAt };
+  return { id: v.id, content: v.content, tags: v.tags, createdAt: v.createdAt };
 };
 
 const parsePromptLibrary = (value: unknown): Prompt[] | undefined => {

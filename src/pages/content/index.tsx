@@ -11,8 +11,7 @@ import './style.css';
 import FolderManager from './components/FolderManager';
 import Timeline from './components/Timeline';
 import FloatBall from './components/FloatBall';
-import { initExportButtonInjection } from './components/ExportButton';
-import { initPromptButtonInjection } from './components/PromptButton';
+import ExportHub from './components/ExportHub';
 
 const mount = async () => {
   await initI18n();
@@ -37,11 +36,9 @@ const mount = async () => {
       <FolderManager />
       <Timeline />
       <FloatBall />
+      <ExportHub />
     </>,
   );
-
-  initExportButtonInjection();
-  initPromptButtonInjection();
 };
 
 void mount();

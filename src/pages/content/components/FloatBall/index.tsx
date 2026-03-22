@@ -6,7 +6,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { ArrowLeftRight, Settings, X } from 'lucide-react';
+import { ArrowLeftRight, Settings, X, Download, BookText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { readStoredFloatBallPosition, writeStoredFloatBallPosition } from '@src/services/storage';
 import { useDraggable } from '../../hooks/useDraggable';
@@ -23,6 +23,8 @@ type PanelMenuProps = {
 
 const panelIcons: Record<string, LucideIcon> = {
   ArrowLeftRight,
+  Download,
+  BookText,
 };
 
 const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
@@ -36,7 +38,7 @@ const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
 
   return (
     <div className={`absolute top-1/2 -translate-y-1/2 ${sideClass} z-50`}>
-      <div className="relative w-[14rem] rounded-xl border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-900 p-2 text-[#374151] dark:text-zinc-200 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+      <div className="relative w-[14rem] rounded-xl border !border-zinc-200 dark:!border-zinc-700/50 !bg-white/95 dark:!bg-[#18181b]/95 backdrop-blur-md p-2 !text-zinc-800 dark:!text-zinc-200 shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
         <div className="mb-1 flex items-center justify-between">
           <div className="text-[12px] font-medium">FloatBall</div>
           <button
@@ -56,12 +58,19 @@ const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
               <button
                 key={panel.id}
                 type="button"
-                className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                aria-label={t(panel.labelKey)}
-                onClick={() => onSelectPanel(panel.id)}
+                className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                aria-label={t(panel.labelKey, panel.fallbackLabel || panel.labelKey)}
+                onClick={() => {
+                  if (panel.action) {
+                    panel.action();
+                    onClose();
+                  } else {
+                    onSelectPanel(panel.id);
+                  }
+                }}
               >
                 {Icon ? <Icon className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" /> : null}
-                <span className="truncate">{t(panel.labelKey)}</span>
+                <span className="truncate">{t(panel.labelKey, panel.fallbackLabel || panel.labelKey)}</span>
               </button>
             );
           })}
@@ -80,8 +89,8 @@ const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
   );
 };
 
-const BALL_SIZE_REM = 4.2;
-const BALL_SIZE_FALLBACK_PX = 28;
+const BALL_SIZE_REM = 2.6;
+const BALL_SIZE_FALLBACK_PX = 24;
 const BALL_RIGHT_PX = 16;
 
 /**
@@ -190,20 +199,20 @@ export default function FloatBall() {
             width: `${BALL_SIZE_REM}rem`,
             height: `${BALL_SIZE_REM}rem`,
             borderRadius: '50%',
-            backgroundColor: hovered ? '#b5572f' : '#c96442',
-            boxShadow: '0 0.25rem 0.75rem rgba(0,0,0,0.3)',
-            transition: 'background-color 0.15s ease',
+            backgroundColor: hovered ? '#c4694b' : '#D97757', // Authentic Claude Terracotta
+            boxShadow: '0 4px 16px rgba(217,119,87,0.3)',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
           onPointerDown={onPointerDown}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           aria-label={t('widthControl.openAria')}
         >
-          <Settings className="pointer-events-none" style={{ width: '1.4rem', height: '1.4rem', color: '#ffffff' }} aria-hidden="true" />
+          <Settings className="pointer-events-none" style={{ width: '1.2rem', height: '1.2rem', color: '#ffffff' }} aria-hidden="true" />
         </button>
 
         {open && !activePanel ? <PanelMenu side={panelSide} onClose={closeAll} onSelectPanel={setActivePanelId} /> : null}
-        {open && activePanel ? <activePanel.component side={panelSide} onClose={closeAll} /> : null}
+        {open && activePanel && activePanel.component ? <activePanel.component side={panelSide} onClose={closeAll} /> : null}
       </div>
     </div>
   );

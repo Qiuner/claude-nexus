@@ -17,7 +17,10 @@
   },
   "type": "module",
   "dependencies": {
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
     "i18next": "^25.8.14",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.577.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -28,6 +31,7 @@
     "@crxjs/vite-plugin": "^2.0.3",
     "@tailwindcss/vite": "^4.1.11",
     "@types/chrome": "^0.1.11",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^24.9.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",

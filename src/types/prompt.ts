@@ -10,8 +10,6 @@
 export type Prompt = {
   /** Unique prompt id */
   id: string;
-  /** Display title */
-  title: string;
   /** Prompt content */
   content: string;
   /** Optional tag list (compatible with legacy data) */
