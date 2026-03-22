@@ -38,12 +38,12 @@ const ExportPopover = ({ open, onClose }: ExportPopoverProps) => {
   if (!open) return null;
 
   return (
-    <div className="absolute right-0 top-full z-50 mt-2 w-[16rem] rounded-xl border border-[#e5e0d8] bg-white p-3 text-[#374151] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+    <div className="absolute right-0 top-full z-50 mt-2 w-[16rem] rounded-xl border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-900 p-3 text-[#374151] dark:text-zinc-200 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
       <div className="mb-2 flex items-center justify-between">
         <div className="text-[12px] font-medium">{t('export.title')}</div>
         <button
           type="button"
-          className="rounded p-1 text-[#6b7280] hover:bg-zinc-100"
+          className="rounded p-1 text-[#6b7280] dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
           aria-label={t('export.closeAria')}
           onClick={onClose}
         >
@@ -51,7 +51,7 @@ const ExportPopover = ({ open, onClose }: ExportPopoverProps) => {
         </button>
       </div>
 
-      <div className="mb-2 text-[12px] text-[#6b7280]">{t('export.formatLabel')}</div>
+      <div className="mb-2 text-[12px] text-[#6b7280] dark:text-zinc-400">{t('export.formatLabel')}</div>
       <div className="mb-3 flex flex-col gap-2">
         <label className="flex cursor-pointer items-center gap-2 text-[12px]">
           <input
@@ -61,7 +61,7 @@ const ExportPopover = ({ open, onClose }: ExportPopoverProps) => {
             checked={format === 'markdown'}
             onChange={() => setFormat('markdown')}
           />
-          <FileText className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+          <FileText className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
           {t('export.formatMarkdown')}
         </label>
         <label className="flex cursor-pointer items-center gap-2 text-[12px]">
@@ -72,23 +72,23 @@ const ExportPopover = ({ open, onClose }: ExportPopoverProps) => {
             checked={format === 'json'}
             onChange={() => setFormat('json')}
           />
-          <FileText className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+          <FileText className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
           {t('export.formatJson')}
         </label>
       </div>
 
       <button
         type="button"
-        className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-3 py-2 text-[12px] text-[#374151] hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-[12px] text-[#374151] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60"
         onClick={() => void exportConversation()}
         disabled={status === 'exporting'}
       >
-        <Download className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+        <Download className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
         {t('export.exportButton')}
       </button>
 
-      {statusText ? <div className="mt-2 text-[12px] text-[#6b7280]">{statusText}</div> : null}
-      {status === 'error' && error ? <div className="mt-1 text-[12px] text-red-600">{error}</div> : null}
+      {statusText ? <div className="mt-2 text-[12px] text-[#6b7280] dark:text-zinc-400">{statusText}</div> : null}
+      {status === 'error' && error ? <div className="mt-1 text-[12px] text-red-600 dark:text-red-300">{error}</div> : null}
     </div>
   );
 };
@@ -118,11 +118,11 @@ const ExportButton = () => {
     <div ref={wrapperRef} className="relative">
       <button
         type="button"
-        className="inline-flex h-8 items-center gap-2 whitespace-nowrap rounded-lg border border-[#e5e0d8] bg-white px-3 text-[12px] text-[#374151] shadow-sm hover:bg-zinc-50 active:scale-[0.98]"
+        className="inline-flex h-8 items-center gap-2 whitespace-nowrap rounded-lg border border-[#e5e0d8] dark:border-zinc-700 !bg-white dark:!bg-zinc-800 px-3 text-[12px] !text-[#374151] dark:!text-zinc-200 shadow-sm hover:!bg-zinc-50 dark:hover:!bg-zinc-700 active:scale-[0.98]"
         aria-label={t('export.buttonAria')}
         onClick={() => setOpen((v) => !v)}
       >
-        <Download className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+        <Download className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
         {t('export.buttonLabel')}
       </button>
 

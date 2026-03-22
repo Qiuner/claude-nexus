@@ -36,12 +36,12 @@ const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
 
   return (
     <div className={`absolute top-1/2 -translate-y-1/2 ${sideClass} z-50`}>
-      <div className="relative w-[14rem] rounded-xl border border-[#e5e0d8] bg-white p-2 text-[#374151] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+      <div className="relative w-[14rem] rounded-xl border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-900 p-2 text-[#374151] dark:text-zinc-200 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
         <div className="mb-1 flex items-center justify-between">
           <div className="text-[12px] font-medium">FloatBall</div>
           <button
             type="button"
-            className="rounded p-1 text-[#6b7280] hover:bg-zinc-100"
+            className="rounded p-1 text-[#6b7280] dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
             aria-label={t('common.cancel')}
             onClick={onClose}
           >
@@ -56,11 +56,11 @@ const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
               <button
                 key={panel.id}
                 type="button"
-                className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] hover:bg-zinc-50"
+                className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] hover:bg-zinc-50 dark:hover:bg-zinc-800"
                 aria-label={t(panel.labelKey)}
                 onClick={() => onSelectPanel(panel.id)}
               >
-                {Icon ? <Icon className="h-4 w-4 text-[#6b7280]" aria-hidden="true" /> : null}
+                {Icon ? <Icon className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" /> : null}
                 <span className="truncate">{t(panel.labelKey)}</span>
               </button>
             );

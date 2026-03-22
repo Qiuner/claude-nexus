@@ -195,12 +195,12 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
   if (!open) return null;
 
   return (
-    <div className="absolute bottom-full left-0 z-50 mb-2 w-[24rem] rounded-xl border border-[#e5e0d8] bg-white p-3 text-[#374151] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+    <div className="absolute bottom-full left-0 z-50 mb-2 w-[24rem] rounded-xl border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-900 p-3 text-[#374151] dark:text-zinc-200 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
       <div className="mb-2 flex items-center justify-between">
         <div className="text-[12px] font-medium">{t('promptLibrary.title')}</div>
         <button
           type="button"
-          className="rounded p-1 text-[#6b7280] hover:bg-zinc-100"
+          className="rounded p-1 text-[#6b7280] dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
           aria-label={t('promptLibrary.closeAria')}
           onClick={onClose}
         >
@@ -223,10 +223,10 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
 
           <div className="mb-2 flex items-start gap-2">
             <div className="flex flex-1 flex-col gap-2">
-              <div className="flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1">
-                <Search className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1">
+                <Search className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
                 <input
-                  className="w-full bg-transparent text-[12px] outline-none"
+                  className="w-full bg-transparent text-[12px] outline-none dark:text-zinc-200 dark:placeholder:text-zinc-500"
                   placeholder={t('promptLibrary.searchPlaceholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -240,7 +240,7 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                     className={
                       selectedTag === null
                         ? 'whitespace-nowrap rounded-full border border-[#374151] !bg-[#374151] px-3 py-1 text-[12px] !text-white'
-                        : 'whitespace-nowrap rounded-full border border-[#e5e0d8] bg-white px-3 py-1 text-[12px] !text-[#374151] hover:bg-zinc-50'
+                        : 'whitespace-nowrap rounded-full border border-[#e5e0d8] dark:border-zinc-600 bg-white dark:bg-zinc-800 px-3 py-1 text-[12px] !text-[#374151] dark:!text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700'
                     }
                     onClick={() => setSelectedTag(null)}
                   >
@@ -253,7 +253,7 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                       className={
                         selectedTag === tag
                           ? 'whitespace-nowrap rounded-full border border-[#374151] !bg-[#374151] px-3 py-1 text-[12px] !text-white'
-                          : 'whitespace-nowrap rounded-full border border-[#e5e0d8] bg-white px-3 py-1 text-[12px] !text-[#374151] hover:bg-zinc-50'
+                          : 'whitespace-nowrap rounded-full border border-[#e5e0d8] dark:border-zinc-600 bg-white dark:bg-zinc-800 px-3 py-1 text-[12px] !text-[#374151] dark:!text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700'
                       }
                       onClick={() => setSelectedTag(tag)}
                     >
@@ -267,51 +267,51 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
             <div className="flex shrink-0 items-center gap-2">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                 onClick={startImport}
               >
-                <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+                <Plus className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
                 {t('promptLibrary.import')}
               </button>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                 onClick={() => void handleExport()}
               >
-                <Download className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+                <Download className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
                 {t('promptLibrary.export')}
               </button>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                 aria-label={t('promptLibrary.newAria')}
                 onClick={startCreate}
               >
-                <Plus className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+                <Plus className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
                 {t('promptLibrary.new')}
               </button>
             </div>
           </div>
 
-          {importMessage ? <div className="mb-2 text-[12px] text-[#6b7280]">{importMessage}</div> : null}
+          {importMessage ? <div className="mb-2 text-[12px] text-[#6b7280] dark:text-zinc-400">{importMessage}</div> : null}
 
           {loading ? (
-            <div className="py-6 text-center text-[12px] text-[#6b7280]">{t('promptLibrary.loading')}</div>
+            <div className="py-6 text-center text-[12px] text-[#6b7280] dark:text-zinc-400">{t('promptLibrary.loading')}</div>
           ) : filtered.length === 0 ? (
-            <div className="py-6 text-center text-[12px] text-[#6b7280]">{t('promptLibrary.empty')}</div>
+            <div className="py-6 text-center text-[12px] text-[#6b7280] dark:text-zinc-400">{t('promptLibrary.empty')}</div>
           ) : (
             <div className="max-h-[18rem] overflow-auto">
               <div className="flex flex-col gap-2">
                 {filtered.map((p) => (
-                  <div key={p.id} className="rounded-lg border border-[#e5e0d8] bg-white p-2">
+                  <div key={p.id} className="rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 p-2">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <div className="truncate text-[12px] font-medium">{p.title}</div>
-                        <div className="mt-1 truncate text-[12px] text-[#6b7280]">{buildPreview(p.content)}</div>
+                        <div className="mt-1 truncate text-[12px] text-[#6b7280] dark:text-zinc-400">{buildPreview(p.content)}</div>
                         {p.tags && p.tags.length ? (
                           <div className="mt-2 flex flex-wrap gap-1">
                             {p.tags.map((tag) => (
-                              <span key={tag} className="rounded border border-[#e5e0d8] bg-white px-1.5 py-0.5 text-[11px] text-[#6b7280]">
+                              <span key={tag} className="rounded border border-[#e5e0d8] dark:border-zinc-600 bg-white dark:bg-zinc-800 px-1.5 py-0.5 text-[11px] text-[#6b7280] dark:text-zinc-400">
                                 {tag}
                               </span>
                             ))}
@@ -323,7 +323,7 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                           <>
                             <button
                               type="button"
-                              className="rounded p-1 text-[#6b7280] hover:bg-zinc-100"
+                              className="rounded p-1 text-[#6b7280] dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700"
                               aria-label={t('promptLibrary.insertAria')}
                               onClick={() => handleInsert(p)}
                             >
@@ -331,7 +331,7 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                             </button>
                             <button
                               type="button"
-                              className="rounded p-1 text-[#6b7280] hover:bg-zinc-100"
+                              className="rounded p-1 text-[#6b7280] dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700"
                               aria-label={t('promptLibrary.editAria')}
                               onClick={() => startEdit(p)}
                             >
@@ -339,7 +339,7 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                             </button>
                             <button
                               type="button"
-                              className="rounded p-1 text-[#6b7280] hover:bg-zinc-100"
+                              className="rounded p-1 text-[#6b7280] dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700"
                               aria-label={t('promptLibrary.deleteAria')}
                               onClick={() => setPendingDeleteId(p.id)}
                             >
@@ -351,21 +351,21 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                     </div>
 
                     {pendingDeleteId === p.id ? (
-                      <div className="mt-2 flex items-center justify-between gap-2 rounded-lg border border-[#e5e0d8] bg-white px-2 py-2">
-                        <div className="min-w-0 text-[12px] text-[#6b7280]">
+                      <div className="mt-2 flex items-center justify-between gap-2 rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-2">
+                        <div className="min-w-0 text-[12px] text-[#6b7280] dark:text-zinc-400">
                           {t('promptLibrary.deleteConfirm', { title: p.title })}
                         </div>
                         <div className="flex shrink-0 gap-2">
                           <button
                             type="button"
-                            className="rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                            className="rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                             onClick={() => setPendingDeleteId(null)}
                           >
                             {t('common.cancel')}
                           </button>
                           <button
                             type="button"
-                            className="rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                            className="rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                             onClick={() => void handleConfirmDelete(p)}
                           >
                             {t('common.delete')}
@@ -376,21 +376,21 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
                       <div className="mt-2 flex gap-2">
                         <button
                           type="button"
-                          className="flex flex-1 items-center justify-center rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                          className="flex flex-1 items-center justify-center rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                           onClick={() => handleInsert(p)}
                         >
                           {t('promptLibrary.insert')}
                         </button>
                         <button
                           type="button"
-                          className="flex flex-1 items-center justify-center rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                          className="flex flex-1 items-center justify-center rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                           onClick={() => startEdit(p)}
                         >
                           {t('promptLibrary.edit')}
                         </button>
                         <button
                           type="button"
-                          className="flex flex-1 items-center justify-center rounded-lg border border-[#e5e0d8] bg-white px-2 py-1 text-[12px] hover:bg-zinc-50"
+                          className="flex flex-1 items-center justify-center rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-1 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
                           onClick={() => setPendingDeleteId(p.id)}
                         >
                           {t('promptLibrary.delete')}
@@ -406,27 +406,27 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
       ) : (
         <>
           <div className="mb-2">
-            <div className="mb-1 text-[12px] text-[#6b7280]">{t('promptLibrary.titleLabel')}</div>
+            <div className="mb-1 text-[12px] text-[#6b7280] dark:text-zinc-400">{t('promptLibrary.titleLabel')}</div>
             <input
-              className="w-full rounded-lg border border-[#e5e0d8] bg-white px-2 py-2 text-[12px] outline-none focus:border-[#c96442]"
+              className="w-full rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-2 text-[12px] dark:text-zinc-200 outline-none focus:border-[#c96442]"
               value={draft.title}
               onChange={(e) => setDraft((v) => ({ ...v, title: e.target.value }))}
               placeholder={t('promptLibrary.titlePlaceholder')}
             />
           </div>
           <div className="mb-2">
-            <div className="mb-1 text-[12px] text-[#6b7280]">{t('promptLibrary.tagsLabel')}</div>
+            <div className="mb-1 text-[12px] text-[#6b7280] dark:text-zinc-400">{t('promptLibrary.tagsLabel')}</div>
             <input
-              className="w-full rounded-lg border border-[#e5e0d8] bg-white px-2 py-2 text-[12px] outline-none focus:border-[#c96442]"
+              className="w-full rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-2 text-[12px] dark:text-zinc-200 outline-none focus:border-[#c96442]"
               value={draft.tags}
               onChange={(e) => setDraft((v) => ({ ...v, tags: e.target.value }))}
               placeholder={t('promptLibrary.tagsPlaceholder')}
             />
           </div>
           <div className="mb-3">
-            <div className="mb-1 text-[12px] text-[#6b7280]">{t('promptLibrary.contentLabel')}</div>
+            <div className="mb-1 text-[12px] text-[#6b7280] dark:text-zinc-400">{t('promptLibrary.contentLabel')}</div>
             <textarea
-              className="h-[10rem] w-full resize-none rounded-lg border border-[#e5e0d8] bg-white px-2 py-2 text-[12px] outline-none focus:border-[#c96442]"
+              className="h-[10rem] w-full resize-none rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-2 text-[12px] dark:text-zinc-200 outline-none focus:border-[#c96442]"
               value={draft.content}
               onChange={(e) => setDraft((v) => ({ ...v, content: e.target.value }))}
               placeholder={t('promptLibrary.contentPlaceholder')}
@@ -435,14 +435,14 @@ const PromptPopover = ({ open, onClose }: PromptPopoverProps) => {
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              className="rounded-lg border border-[#e5e0d8] bg-white px-3 py-2 text-[12px] hover:bg-zinc-50"
+              className="rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700"
               onClick={() => setMode('list')}
             >
               {t('common.cancel')}
             </button>
             <button
               type="button"
-              className="rounded-lg border border-[#e5e0d8] bg-white px-3 py-2 text-[12px] hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-lg border border-[#e5e0d8] dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-[12px] dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60"
               onClick={() => void handleSave()}
               disabled={!draft.title.trim() || !draft.content.trim()}
             >
@@ -480,11 +480,11 @@ const PromptButton = () => {
     <div ref={wrapperRef} className="relative">
       <button
         type="button"
-        className="inline-flex h-8 items-center gap-2 rounded-lg bg-white px-3 text-[12px] text-[#374151] hover:bg-zinc-50 active:scale-[0.98]"
+        className="inline-flex h-8 items-center gap-2 rounded-lg !bg-white dark:!bg-zinc-800 px-3 text-[12px] !text-[#374151] dark:!text-zinc-200 hover:!bg-zinc-50 dark:hover:!bg-zinc-700 active:scale-[0.98]"
         aria-label={t('promptLibrary.buttonAria')}
         onClick={() => setOpen((v) => !v)}
       >
-        <BookText className="h-4 w-4 text-[#6b7280]" aria-hidden="true" />
+        <BookText className="h-4 w-4 text-[#6b7280] dark:text-zinc-400" aria-hidden="true" />
         {t('promptLibrary.buttonLabel')}
       </button>
 
