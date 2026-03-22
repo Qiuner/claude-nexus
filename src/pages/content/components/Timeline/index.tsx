@@ -199,8 +199,8 @@ export default function Timeline() {
                     </span>
                   </div>
                   <div
-                    className={`w-[14px] shrink-0 h-[1.5px] rounded-full transition-colors ${
-                      isActive ? '!bg-zinc-900 dark:!bg-zinc-200' : '!bg-black/20 dark:!bg-white/20'
+                    className={`w-[14px] shrink-0 h-[1.5px] rounded-full transition-all duration-300 ${
+                      isActive ? '!bg-[#D97757] dark:!bg-[#D97757] shadow-[0_0_8px_rgba(217,119,87,0.5)]' : '!bg-black/20 dark:!bg-white/20'
                     }`}
                   />
                 </div>
