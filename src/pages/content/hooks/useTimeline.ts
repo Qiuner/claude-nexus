@@ -90,12 +90,14 @@ const buildNodes = (scrollContainer: HTMLElement): TimelineNode[] => {
   return nodes;
 };
 
-const computeActiveIndex = (nodes: TimelineNode[]): number => {
+const computeActiveIndex = (nodes: TimelineNode[], container: HTMLElement | null): number => {
   if (nodes.length === 0) return -1;
+  const containerTop = container ? container.getBoundingClientRect().top : 0;
+  const threshold = containerTop + SCROLL_OFFSET_PX + 40;
   let active = -1;
   for (let i = 0; i < nodes.length; i += 1) {
     const top = nodes[i].element.getBoundingClientRect().top;
-    if (top < SCROLL_OFFSET_PX) active = i;
+    if (top <= threshold) active = i;
   }
   return Math.max(0, active);
 };
@@ -119,7 +121,7 @@ export const useTimeline = (): TimelineApi => {
       if (!container) return;
       const nextNodes = buildNodes(container);
       setNodes(nextNodes);
-      setActiveIndex(computeActiveIndex(nextNodes));
+      setActiveIndex(computeActiveIndex(nextNodes, container));
     };
   }, []);
 
@@ -199,7 +201,7 @@ export const useTimeline = (): TimelineApi => {
         raf = 0;
         const nextNodes = buildNodes(el);
         setNodes(nextNodes);
-        setActiveIndex(computeActiveIndex(nextNodes));
+        setActiveIndex(computeActiveIndex(nextNodes, el));
       });
     };
 
@@ -222,7 +224,7 @@ export const useTimeline = (): TimelineApi => {
       if (raf) return;
       raf = window.requestAnimationFrame(() => {
         raf = 0;
-        setActiveIndex(computeActiveIndex(nodesRef.current));
+        setActiveIndex(computeActiveIndex(nodesRef.current, el));
       });
     };
 
@@ -244,7 +246,7 @@ export const useTimeline = (): TimelineApi => {
       const containerRect = el.getBoundingClientRect();
       const nodeRect = node.element.getBoundingClientRect();
       const targetTop = nodeRect.top - containerRect.top + el.scrollTop - SCROLL_OFFSET_PX;
-      el.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+      el.scrollTo({ top: Math.max(0, targetTop), behavior: 'instant' });
     };
   }, [scrollContainer]);
 

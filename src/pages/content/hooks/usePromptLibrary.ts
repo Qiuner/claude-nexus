@@ -9,7 +9,6 @@ import type { Prompt } from '@src/types/prompt';
 import { readStoredPromptLibrary, writeStoredPromptLibrary } from '@src/services/storage';
 
 type PromptDraft = {
-  title: string;
   content: string;
   tags?: string[];
 };
@@ -32,7 +31,6 @@ const normalizeDraft = (draft: PromptDraft): PromptDraft => {
     .filter(Boolean)
     .filter((t, i, arr) => arr.indexOf(t) === i);
   return {
-    title: draft.title.trim(),
     content: draft.content.trim(),
     tags: tags.length ? tags : undefined,
   };
@@ -52,7 +50,6 @@ const buildTagSet = (prompts: Prompt[]): string[] => {
 const matchesQuery = (prompt: Prompt, query: string): boolean => {
   const q = query.trim().toLowerCase();
   if (!q) return true;
-  if (prompt.title.toLowerCase().includes(q)) return true;
   if (prompt.content.toLowerCase().includes(q)) return true;
   if (prompt.tags && prompt.tags.some((t) => t.toLowerCase().includes(q))) return true;
   return false;
@@ -126,7 +123,6 @@ export const usePromptLibrary = (): PromptLibraryApi => {
     const normalized = normalizeDraft(draft);
     const prompt: Prompt = {
       id: generateId(),
-      title: normalized.title,
       content: normalized.content,
       tags: normalized.tags,
       createdAt: Date.now(),
@@ -140,7 +136,7 @@ export const usePromptLibrary = (): PromptLibraryApi => {
     const index = prompts.findIndex((p) => p.id === id);
     if (index < 0) return null;
     const normalized = normalizeDraft(draft);
-    const updated: Prompt = { ...prompts[index], title: normalized.title, content: normalized.content, tags: normalized.tags };
+    const updated: Prompt = { ...prompts[index], content: normalized.content, tags: normalized.tags };
     const next = prompts.slice();
     next[index] = updated;
     await persist(next);
@@ -188,7 +184,6 @@ export const usePromptLibrary = (): PromptLibraryApi => {
       }
       existing.add(content);
 
-      const title = content.split('\n')[0]?.trim() || 'Untitled';
       const tags =
         v.tags && Array.isArray(v.tags) && v.tags.every((t) => typeof t === 'string')
           ? v.tags.map((t) => t.trim()).filter(Boolean).filter((t, i, arr) => arr.indexOf(t) === i)
@@ -196,7 +191,6 @@ export const usePromptLibrary = (): PromptLibraryApi => {
 
       nextImported.push({
         id: generateId(),
-        title: title.length > 60 ? `${title.slice(0, 60)}…` : title,
         content,
         tags: tags.length ? tags : undefined,
         createdAt: Date.now(),

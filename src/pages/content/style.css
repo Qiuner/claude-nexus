@@ -1,6 +1,12 @@
-/* style.css: content script stylesheet entry (Tailwind preprocessing entry). Last updated: 2026-03-09 */
+/* style.css: content script stylesheet entry (Tailwind preprocessing entry). Last updated: 2026-03-22 */
 
 @import "tailwindcss";
+
+/* Claude.ai uses data-mode="dark" on <html> for dark mode.
+   Override Tailwind v4's default dark variant (prefers-color-scheme)
+   so that dark: utilities respond to this attribute.
+   Syntax per official docs: https://tailwindcss.com/docs/dark-mode#using-a-data-attribute */
+@custom-variant dark (&:where(.dark, [data-theme="dark"], [data-mode="dark"], .dark *, [data-theme="dark"] *, [data-mode="dark"] *));
 
 .your-class {
     color: aliceblue;

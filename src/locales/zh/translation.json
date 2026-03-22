@@ -55,7 +55,15 @@
     "hint": "语言切换会应用到当前打开的 claude.ai 页面。"
   },
   "floatBall": {
-    "width": "对话宽度"
+    "width": "对话宽度",
+    "export": "选段导出"
+  },
+  "exportDock": {
+    "selected": "项已选",
+    "selectUser": "全选人类",
+    "selectAI": "全选AI",
+    "selectAll": "全选所有",
+    "cancelMode": "取消框选模式"
   },
   "export": {
     "title": "导出对话",

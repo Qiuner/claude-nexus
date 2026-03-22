@@ -55,7 +55,15 @@
     "hint": "Language changes apply to the current claude.ai tab."
   },
   "floatBall": {
-    "width": "Chat width"
+    "width": "Chat width",
+    "export": "Cherry-Pick Export"
+  },
+  "exportDock": {
+    "selected": "Selected",
+    "selectUser": "Select User",
+    "selectAI": "Select AI",
+    "selectAll": "Select All",
+    "cancelMode": "Cancel Selection Mode"
   },
   "export": {
     "title": "Export conversation",
