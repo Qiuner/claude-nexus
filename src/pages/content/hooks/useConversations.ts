@@ -4,7 +4,7 @@
  * Created: 2026-03-09
  */
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { Conversation } from '@src/types/conversation';
 import { estimateIsDarkBackground, extractConversationIdFromHref, findNavUl, scanConversations } from '@pages/content/utils/dom';
 import {
@@ -154,7 +154,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
     setIsDarkTheme(estimated ?? prefersDark);
   }, [navUlEl, scanTick]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ul = navUlEl;
     if (!ul) return;
 
@@ -179,7 +179,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
     return () => mo.disconnect();
   }, [navUlEl, scanTick, hiddenConversationIds]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ul = navUlEl;
     if (!ul) return;
     applyConversationVisibility(ul, hiddenConversationIds);
