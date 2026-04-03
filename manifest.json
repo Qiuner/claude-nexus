@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Claude-Nexus",
-  "version": "0.2.1",
-  "description": "description in manifest.json",
+  "version": "0.4.0",
+  "description": "An all-in-one enhancement suite for Claude.ai - folder management, timeline navigation, and chat export in one powerful extension.",
   "options_ui": {
     "page": "src/pages/options/index.html"
   },
