@@ -57,6 +57,16 @@
   "floatBall": {
     "width": "Chat width"
   },
+  "usageRings": {
+    "fiveHourWindow": "Current 5 hours",
+    "sevenDayWindow": "Current 7 days",
+    "usedPercent": "Used {{value}}%",
+    "remainingPercent": "Remaining {{value}}%",
+    "resetToday": "Resets today at {{time}}",
+    "resetTomorrow": "Resets tomorrow at {{time}}",
+    "resetInDays": "Resets in {{days}} days",
+    "resetUnknown": "Reset time unavailable"
+  },
   "export": {
     "title": "Export conversation",
     "buttonLabel": "Export",

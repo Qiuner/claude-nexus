@@ -10,7 +10,9 @@ import { ArrowLeftRight, Settings, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { readStoredFloatBallPosition, writeStoredFloatBallPosition } from '@src/services/storage';
 import { useDraggable } from '../../hooks/useDraggable';
+import { useUsageRings } from '../../hooks/useUsageRings';
 import { panels } from './panelRegistry';
+import UsageRings from './UsageRings';
 
 type Point = { x: number; y: number };
 type PanelSide = 'left' | 'right';
@@ -80,8 +82,9 @@ const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
   );
 };
 
-const BALL_SIZE_REM = 4.2;
-const BALL_SIZE_FALLBACK_PX = 28;
+const BALL_BUTTON_SIZE_REM = 4;
+const BALL_WRAPPER_SIZE_REM = 6;
+const BALL_WRAPPER_FALLBACK_PX = 96;
 const BALL_RIGHT_PX = 16;
 
 /**
@@ -90,10 +93,12 @@ const BALL_RIGHT_PX = 16;
  *
  * Modification Notes:
  *   - 2026-03-10 Reduced ball size (~70%) for better visual balance.
+ *   - 2026-04-03 Enlarged the ring wrapper and trimmed the button size so both usage rings remain visible.
  */
 export default function FloatBall() {
   const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const { usageData, refreshUsage } = useUsageRings();
   const [open, setOpen] = useState(false);
   const [activePanelId, setActivePanelId] = useState<string | null>(null);
   const [loadedPosition, setLoadedPosition] = useState<Point | null>(null);
@@ -119,9 +124,9 @@ export default function FloatBall() {
    */
   const getSize = () => {
     const el = rootRef.current;
-    if (!el) return { width: BALL_SIZE_FALLBACK_PX, height: BALL_SIZE_FALLBACK_PX };
+    if (!el) return { width: BALL_WRAPPER_FALLBACK_PX, height: BALL_WRAPPER_FALLBACK_PX };
     const rect = el.getBoundingClientRect();
-    return { width: rect.width || BALL_SIZE_FALLBACK_PX, height: rect.height || BALL_SIZE_FALLBACK_PX };
+    return { width: rect.width || BALL_WRAPPER_FALLBACK_PX, height: rect.height || BALL_WRAPPER_FALLBACK_PX };
   };
 
   /**
@@ -138,6 +143,7 @@ export default function FloatBall() {
     defaultPosition: () => loadedPosition ?? defaultPosition(),
     getSize,
     onClick: () => {
+      void refreshUsage();
       if (open) {
         closeAll();
         return;
@@ -182,25 +188,34 @@ export default function FloatBall() {
 
   return (
     <div className="fixed z-50" style={containerStyle}>
-      <div ref={rootRef} className="relative">
-        <button
-          type="button"
-          className={`flex items-center justify-center active:scale-95 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-          style={{
-            width: `${BALL_SIZE_REM}rem`,
-            height: `${BALL_SIZE_REM}rem`,
-            borderRadius: '50%',
-            backgroundColor: hovered ? '#b5572f' : '#c96442',
-            boxShadow: '0 0.25rem 0.75rem rgba(0,0,0,0.3)',
-            transition: 'background-color 0.15s ease',
-          }}
-          onPointerDown={onPointerDown}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          aria-label={t('widthControl.openAria')}
-        >
-          <Settings className="pointer-events-none" style={{ width: '1.4rem', height: '1.4rem', color: '#ffffff' }} aria-hidden="true" />
-        </button>
+      <div
+        ref={rootRef}
+        className="relative"
+        style={{
+          width: `${BALL_WRAPPER_SIZE_REM}rem`,
+          height: `${BALL_WRAPPER_SIZE_REM}rem`,
+        }}
+      >
+        <UsageRings data={usageData} side={panelSide} isDragging={isDragging}>
+          <button
+            type="button"
+            className={`relative z-10 flex items-center justify-center active:scale-95 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            style={{
+              width: `${BALL_BUTTON_SIZE_REM}rem`,
+              height: `${BALL_BUTTON_SIZE_REM}rem`,
+              borderRadius: '50%',
+              backgroundColor: hovered ? '#b5572f' : '#c96442',
+              boxShadow: '0 0.25rem 0.75rem rgba(0,0,0,0.3)',
+              transition: 'background-color 0.15s ease',
+            }}
+            onPointerDown={onPointerDown}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            aria-label={t('widthControl.openAria')}
+          >
+            <Settings className="pointer-events-none" style={{ width: '1.4rem', height: '1.4rem', color: '#ffffff' }} aria-hidden="true" />
+          </button>
+        </UsageRings>
 
         {open && !activePanel ? <PanelMenu side={panelSide} onClose={closeAll} onSelectPanel={setActivePanelId} /> : null}
         {open && activePanel ? <activePanel.component side={panelSide} onClose={closeAll} /> : null}

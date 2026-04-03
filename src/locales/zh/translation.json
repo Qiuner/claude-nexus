@@ -57,6 +57,16 @@
   "floatBall": {
     "width": "对话宽度"
   },
+  "usageRings": {
+    "fiveHourWindow": "当前 5 小时",
+    "sevenDayWindow": "当前 7 天",
+    "usedPercent": "已用 {{value}}%",
+    "remainingPercent": "剩余 {{value}}%",
+    "resetToday": "今天 {{time}} 重置",
+    "resetTomorrow": "明天 {{time}} 重置",
+    "resetInDays": "{{days}} 天后重置",
+    "resetUnknown": "重置时间未知"
+  },
   "export": {
     "title": "导出对话",
     "buttonLabel": "导出",

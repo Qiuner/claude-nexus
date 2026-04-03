@@ -57,6 +57,16 @@
   "floatBall": {
     "width": "對話寬度"
   },
+  "usageRings": {
+    "fiveHourWindow": "目前 5 小時",
+    "sevenDayWindow": "目前 7 天",
+    "usedPercent": "已用 {{value}}%",
+    "remainingPercent": "剩餘 {{value}}%",
+    "resetToday": "今天 {{time}} 重置",
+    "resetTomorrow": "明天 {{time}} 重置",
+    "resetInDays": "{{days}} 天後重置",
+    "resetUnknown": "重置時間未知"
+  },
   "export": {
     "title": "匯出對話",
     "buttonLabel": "匯出",
