@@ -106,7 +106,7 @@ Export conversations as Markdown or JSON from the toolbar.
    - Open `chrome://extensions`
    - Enable **Developer mode**
    - Click **Load unpacked**
-   - Select the `dist/` folder
+   - Select the `dist_chrome/` folder
 
 ---
 

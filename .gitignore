@@ -384,6 +384,7 @@ $RECYCLE.BIN/
 /dist
 /dist_chrome
 /dist_firefox
+/docs/.vitepress/dist
 
 # etc
 .idea
