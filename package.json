@@ -20,7 +20,7 @@
   },
   "type": "module",
   "dependencies": {
-    "i18next": "^25.10.10",
+    "i18next": "^26.0.3",
     "lucide-react": "^1.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.1.0",
