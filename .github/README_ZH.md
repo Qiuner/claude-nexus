@@ -33,7 +33,7 @@
 - **便捷管理**：随时重命名、删除和重新整理
 - **持久化存储**：文件夹结构跨会话本地保存
 
-![新建文件夹](../docs/assets/NewFolder.gif)
+![新建文件夹](../docs/assets/v2/NewFolder.gif)
 
 ### 📍 时间线导航
 
@@ -73,7 +73,7 @@
 
 - **入口**：浏览器工具栏点击插件图标打开 popup
 - **支持语言**：中文 / English
-  ![LanguageSwitch](../docs/assets/LanguageSwitch.gif)
+  ![LanguageSwitch](../docs/assets/v2/LanguageSwitch.gif)
 
 ---
 

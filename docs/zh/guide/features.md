@@ -4,7 +4,7 @@
 
 通过拖拽、本地持久化和轻量的文件夹操作，让你的对话历史更有条理。
 
-![新建文件夹](/assets/NewFolder.gif)
+![新建文件夹](/assets/v2/NewFolder.gif)
 
 ## 时间线导航
 
@@ -38,4 +38,4 @@
 
 可在扩展弹窗中切换中文与 English。
 
-![语言切换](/assets/LanguageSwitch.gif)
+![语言切换](/assets/v2/LanguageSwitch.gif)

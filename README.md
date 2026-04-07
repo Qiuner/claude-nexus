@@ -33,7 +33,7 @@ Drag and drop your chats into folders that make sense to you. Stop digging throu
 - **Easy management**: Rename, delete, and reorganize at any time
 - **Persistent storage**: Your folder structure is saved locally across sessions
 
-![New folder](docs/assets/NewFolder.gif)
+![New folder](docs/assets/v2/NewFolder.gif)
 
 ### 📍 Timeline Navigation
 
@@ -73,7 +73,7 @@ Export conversations as Markdown or JSON from the toolbar.
 
 - **Entry**: Click the extension icon in the browser toolbar to open the popup
 - **Languages**: 中文 / English
-  ![LanguageSwitch](docs/assets/LanguageSwitch.gif)
+  ![LanguageSwitch](docs/assets/v2/LanguageSwitch.gif)
 
 ---
 

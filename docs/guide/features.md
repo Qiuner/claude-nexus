@@ -4,7 +4,7 @@
 
 Keep your conversations sorted with drag-and-drop folders, local persistence, and simple folder management.
 
-![New folder](/assets/NewFolder.gif)
+![New folder](/assets/v2/NewFolder.gif)
 
 ## Timeline Navigation
 
@@ -38,4 +38,4 @@ Export conversations as Markdown or JSON from the chat toolbar.
 
 Switch between 中文 and English from the popup.
 
-![Language switch](/assets/LanguageSwitch.gif)
+![Language switch](/assets/v2/LanguageSwitch.gif)
