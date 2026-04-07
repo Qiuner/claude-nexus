@@ -1,5 +1,11 @@
 # 安装方式
 
+## Chrome Web Store 安装
+
+可通过官方 Chrome Web Store 页面安装 claude-nexus：
+
+- https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka
+
 ## 手动安装
 
 1. 克隆仓库。
@@ -32,4 +38,4 @@ yarn build:chrome
 
 - 扩展只会注入到 `https://claude.ai/*`
 - 文件夹和提示词等数据保存在浏览器本地
-- 当前项目主要提供扩展构建方式，未包含商店发布流程
+- claude-nexus 已上架 Chrome Web Store，手动安装仍适用于本地开发构建

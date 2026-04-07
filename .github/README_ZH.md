@@ -5,24 +5,22 @@
 
 ### Claude 缺失的增强套件 ✨
 
+**现已上架 Chrome Web Store：** [立即安装 claude-nexus](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)
+
 为 [claude.ai](https://claude.ai) 带来文件夹管理、时间线导航、提示词库等强大功能。
 
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Live-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)
+[![Website](https://img.shields.io/badge/Website-Online-111827?style=flat-square)](https://qiuner.github.io/claude-nexus/)
 [![Chrome](https://img.shields.io/badge/Chrome-✓-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](#安装)
 [![License: MIT](https://img.shields.io/badge/License-MIT-D97757?style=flat-square)](../LICENSE)
 [![Built with React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-[English](../README.md) · [中文](#)
+[Chrome Web Store](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka) · [官网](https://qiuner.github.io/claude-nexus/) · [English](../README.md) · [中文](#)
 
 </div>
 
 ---
-
-> 我每天都在用 Claude。但随着对话越来越多，侧边栏会变得越来越乱：不能分组，也很难快速找到需要的内容。
->
-> 有一天我看到了 [gemini-voyager](https://github.com/Nagi-ovo/gemini-voyager) 这个项目，被它的思路打动了。我在想：为什么 Claude 没有类似的增强套件？
->
-> 所以我做了 claude-nexus。
 
 ## ✨ 功能
 
@@ -81,7 +79,15 @@
 
 ## 📥 安装
 
+### Chrome Web Store 安装
+
+可直接通过官方商店安装 claude-nexus：
+
+- https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka
+
 ### 手动安装（开发版）
+
+用于本地开发或测试时加载未打包扩展。
 
 1. 克隆仓库
 
@@ -106,14 +112,14 @@
    - 打开 `chrome://extensions`
    - 开启**开发者模式**
    - 点击**加载已解压的扩展程序**
-   - 选择 `dist/` 文件夹
+   - 选择 `dist_chrome/` 文件夹
 
 ---
 
 ## 🛠️ 开发
 
 ```bash
-# 启动开发模式（自动重新构建）
+# 启动 Chrome 开发模式并自动重新构建
 yarn dev:chrome
 
 # 每次构建后：
@@ -121,6 +127,13 @@ yarn dev:chrome
 # 2. 点击 claude-nexus 的刷新按钮
 # 3. 刷新 claude.ai 页面
 ```
+
+### 技术栈
+
+- **框架**：React 19 + TypeScript
+- **样式**：TailwindCSS 4
+- **构建**：Vite + vite-web-extension
+- **平台**：Chrome Manifest V3
 
 ---
 

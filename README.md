@@ -5,24 +5,22 @@
 
 ### The missing power-up for Claude ✨
 
+**Now live on the Chrome Web Store:** [Install claude-nexus](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)
+
 Supercharge your [claude.ai](https://claude.ai) experience with folder organization, timeline navigation, prompt library, and more.
 
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Live-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)
+[![Website](https://img.shields.io/badge/Website-Online-111827?style=flat-square)](https://qiuner.github.io/claude-nexus/)
 [![Chrome](https://img.shields.io/badge/Chrome-✓-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](#installation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-D97757?style=flat-square)](LICENSE)
 [![Built with React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
-[English](#) · [中文](.github/README_ZH.md)
+[Chrome Web Store](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka) · [Website](https://qiuner.github.io/claude-nexus/) · [English](#) · [中文](.github/README_ZH.md)
 
 </div>
 
 ---
-
-> I use Claude every day. But as conversations pile up, the sidebar becomes a mess — no way to group them, no way to find what you need.
->
-> One day I came across [gemini-voyager](https://github.com/Nagi-ovo/gemini-voyager) and was genuinely impressed by the idea. I thought: why doesn't Claude have something like this?
->
-> So I built it.
 
 ## ✨ Features
 
@@ -81,7 +79,15 @@ Export conversations as Markdown or JSON from the toolbar.
 
 ## 📥 Installation
 
+### Chrome Web Store
+
+Install claude-nexus directly from the official listing:
+
+- https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka
+
 ### Manual Installation (Development)
+
+Build and load the unpacked extension locally for development or testing.
 
 1. Clone the repository
 

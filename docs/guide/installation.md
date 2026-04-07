@@ -1,5 +1,11 @@
 # Installation
 
+## Chrome Web Store
+
+Install claude-nexus from the official Chrome Web Store listing:
+
+- https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka
+
 ## Manual installation
 
 1. Clone the repository.
@@ -32,4 +38,4 @@ yarn build:chrome
 
 - The extension injects into `https://claude.ai/*`
 - Data such as folders and prompts is stored locally in the browser
-- This project currently focuses on extension builds rather than store distribution
+- claude-nexus is available on the Chrome Web Store, and manual installation remains useful for local development builds
