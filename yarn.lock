@@ -3190,10 +3190,10 @@ html-void-elements@^3.0.0:
   resolved "https://registry.npmmirror.com/html-void-elements/-/html-void-elements-3.0.0.tgz#fc9dbd84af9e747249034d4d62602def6517f1d7"
   integrity sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==
 
-i18next@^25.10.10:
-  version "25.10.10"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.10.10.tgz#d610511c87150e7a98c58fa780e93f90603fe187"
-  integrity sha512-cqUW2Z3EkRx7NqSyywjkgCLK7KLCL6IFVFcONG7nVYIJ3ekZ1/N5jUsihHV6Bq37NfhgtczxJcxduELtjTwkuQ==
+i18next@^26.0.4:
+  version "26.0.4"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-26.0.4.tgz#fb1511e53dc617037522bbf7e983cb7384d24f0f"
+  integrity sha512-gXF7U9bfioXPLv7mw8Qt2nfO7vij5MyINvPgVv99pX3fL1Y01pw2mKBFrlYpRxRCl2wz3ISenj6VsMJT2isfuA==
   dependencies:
     "@babel/runtime" "^7.29.2"
 
