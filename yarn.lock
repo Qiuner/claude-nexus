@@ -257,14 +257,7 @@
     "@babel/template" "^7.28.6"
     "@babel/types" "^7.28.6"
 
-"@babel/parser@^7.24.4", "@babel/parser@^7.28.6", "@babel/parser@^7.29.0":
-  version "7.29.0"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.29.0.tgz#669ef345add7d057e92b7ed15f0bac07611831b6"
-  integrity sha512-IyDgFV5GeDUVX4YdF/3CPULtVGSXXMLh1xVIgdCgxApktqnQV0r7/8Nqthg+8YLGaAtdyIlo2qIdZrbCv4+7ww==
-  dependencies:
-    "@babel/types" "^7.29.0"
-
-"@babel/parser@^7.29.2":
+"@babel/parser@^7.24.4", "@babel/parser@^7.28.6", "@babel/parser@^7.29.0", "@babel/parser@^7.29.2":
   version "7.29.2"
   resolved "https://registry.npmmirror.com/@babel/parser/-/parser-7.29.2.tgz#58bd50b9a7951d134988a1ae177a35ef9a703ba1"
   integrity sha512-4GgRzy/+fsBa72/RZVJmGKPmZu9Byn8o4MoLpmNe1m8ZfYnz5emHLQz3U4gLud6Zwl0RZIcgiLD7Uq7ySFuDLA==
@@ -2646,10 +2639,10 @@ eslint-plugin-jsx-a11y@^6.10.2:
     safe-regex-test "^1.0.3"
     string.prototype.includes "^2.0.1"
 
-eslint-plugin-react-hooks@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-7.0.1.tgz#66e258db58ece50723ef20cc159f8aa908219169"
-  integrity sha512-O0d0m04evaNzEPoSW+59Mezf8Qt0InfgGIBJnpC0h3NH/WjUAR7BIKUfysC6todmtiZ/A0oUVS8Gce0WhBrHsA==
+eslint-plugin-react-hooks@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-7.1.1.tgz#e6742cad75d970c0a3f30d7d3fa80a4784f55927"
+  integrity sha512-f2I7Gw6JbvCexzIInuSbZpfdQ44D7iqdWX01FKLvrPgqxoE7oMj8clOfto8U6vYiz4yd5oKu39rRSVOe1zRu0g==
   dependencies:
     "@babel/core" "^7.24.4"
     "@babel/parser" "^7.24.4"
