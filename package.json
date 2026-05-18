@@ -22,7 +22,7 @@
   "dependencies": {
     "i18next": "^26.0.6",
     "lucide-react": "^1.7.0",
-    "react": "^19.2.4",
+    "react": "^19.2.6",
     "react-dom": "^19.2.4",
     "react-i18next": "^17.0.0",
     "webextension-polyfill": "^0.12.0"
