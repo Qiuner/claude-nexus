@@ -1126,10 +1126,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@types/chrome@^0.1.42":
-  version "0.1.42"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.1.42.tgz#b13d3e711fb7ceafe67f95909455c22fe6253f7e"
-  integrity sha512-tdT2roFqGecZZDjA9fUEAINb2STxSPifHMDvY6EfRjNRCjdrs/0FwKt5RCIA9MKMd1arAYZZL3nwEkp6ZLZu2w==
+"@types/chrome@^0.1.43":
+  version "0.1.43"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.1.43.tgz#183d5e5c77d2a869bd24190d8944be8552a73f4e"
+  integrity sha512-ukH/HhmR6ht+UTX3PLUWJxgJ/RQcK2Foj4lBzsF24SIWsXgqhGuXqjd8FFuwioPP7d/JUKLM4g8GZxw3F4HTcA==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
