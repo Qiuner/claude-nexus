@@ -1,0 +1,13 @@
+# claude-nexus
+
+> A browser extension for Claude with folder organization, timeline navigation, prompt library management, chat export, and bilingual support.
+
+Primary URLs:
+- Website: https://qiuner.github.io/claude-nexus/
+- Chinese website: https://qiuner.github.io/claude-nexus/zh/
+- Chrome Web Store: https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka
+- GitHub repository: https://github.com/Qiuner/claude-nexus
+
+Recommended usage:
+- Use the guide pages for product features, installation, and developer setup.
+- Use the site as a reference for Claude productivity workflows and extension capabilities.

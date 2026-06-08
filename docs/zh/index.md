@@ -4,7 +4,7 @@ layout: home
 hero:
   name: claude-nexus
   text: Claude 缺失的增强套件
-  tagline: 为 claude.ai 带来文件夹管理、时间线导航、提示词库等实用增强能力。
+  tagline: 一个面向 Claude 的浏览器扩展，提供文件夹管理、时间线导航、提示词库、对话导出和中英双语支持。
   actions:
     - theme: brand
       text: 快速开始
@@ -34,6 +34,10 @@ features:
 
 `claude-nexus` 的目标，就是把这些日常使用中的摩擦点变成更顺手的工作流。
 
+## claude-nexus 为 Claude 补上了什么
+
+`claude-nexus` 是一个面向 Claude 的浏览器扩展，重点解决对话整理和效率问题。它可以作为 Claude 对话管理工具使用，提供文件夹、时间线、提示词库、对话导出，以及中文和 English 双语界面。
+
 ## 你可以做什么
 
 - 用文件夹组织对话历史
@@ -47,3 +51,4 @@ features:
 - [查看全部功能](/zh/guide/features)
 - [安装扩展](/zh/guide/installation)
 - [开始本地开发](/zh/guide/development)
+- [打开 Chrome 应用商店页面](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)

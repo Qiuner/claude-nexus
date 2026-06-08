@@ -4,7 +4,7 @@ layout: home
 hero:
   name: claude-nexus
   text: The missing power-up for Claude
-  tagline: Supercharge your claude.ai experience with folder organization, timeline navigation, prompt library, and more.
+  tagline: A browser extension for Claude that adds folder organization, timeline navigation, prompt library management, chat export, and bilingual support.
   actions:
     - theme: brand
       text: Get Started
@@ -34,6 +34,10 @@ I use Claude every day. As conversations pile up, the sidebar becomes a mess wit
 
 `claude-nexus` turns that friction into a smoother workflow with practical tools designed for daily Claude users.
 
+## What claude-nexus adds to Claude
+
+`claude-nexus` is a Claude extension focused on conversation organization and productivity. It works as a Claude chat organizer with folders, timeline navigation, prompt library management, conversation export, and a bilingual interface for English and Chinese users.
+
 ## What you can do
 
 - Organize chats into folders that make sense to you
@@ -47,3 +51,4 @@ I use Claude every day. As conversations pile up, the sidebar becomes a mess wit
 - [Explore the feature guide](/guide/features)
 - [Install the extension](/guide/installation)
 - [Set up local development](/guide/development)
+- [Open the Chrome Web Store listing](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)

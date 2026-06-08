@@ -7,7 +7,7 @@
 
 **Now live on the Chrome Web Store:** [Install claude-nexus](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)
 
-Supercharge your [claude.ai](https://claude.ai) experience with folder organization, timeline navigation, prompt library, and more.
+`claude-nexus` is a browser extension for [claude.ai](https://claude.ai) that adds folder organization, timeline navigation, prompt library management, chat export, and bilingual support.
 
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Live-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka)
 [![Website](https://img.shields.io/badge/Website-Online-111827?style=flat-square)](https://qiuner.github.io/claude-nexus/)

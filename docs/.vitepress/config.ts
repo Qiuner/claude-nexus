@@ -1,11 +1,64 @@
 import { defineConfig } from 'vitepress'
 
 const githubLink = 'https://github.com/Qiuner/claude-nexus'
+const siteUrl = 'https://qiuner.github.io/claude-nexus'
+const siteTitle = 'claude-nexus'
+const siteDescription = 'A browser extension for Claude with folders, timeline navigation, prompt library, chat export, and bilingual support.'
+const siteKeywords = [
+  'Claude extension',
+  'Claude chat organizer',
+  'Claude folder manager',
+  'Claude prompt library',
+  'Claude conversation export',
+  'Claude timeline navigation',
+  'Claude browser extension',
+  'claude.ai productivity',
+]
 
 export default defineConfig({
-  title: 'claude-nexus',
-  description: 'The missing power-up for Claude.',
+  title: siteTitle,
+  description: siteDescription,
   base: '/claude-nexus/',
+  sitemap: {
+    hostname: siteUrl,
+  },
+  head: [
+    ['meta', { name: 'theme-color', content: '#4285F4' }],
+    ['meta', { name: 'keywords', content: siteKeywords.join(', ') }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: siteTitle }],
+    ['meta', { property: 'og:title', content: siteTitle }],
+    ['meta', { property: 'og:description', content: siteDescription }],
+    ['meta', { property: 'og:url', content: `${siteUrl}/` }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:title', content: siteTitle }],
+    ['meta', { name: 'twitter:description', content: siteDescription }],
+    ['link', { rel: 'canonical', href: `${siteUrl}/` }],
+    [
+      'script',
+      { type: 'application/ld+json' },
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: siteTitle,
+        applicationCategory: 'BrowserApplication',
+        operatingSystem: 'Chrome',
+        description: siteDescription,
+        url: `${siteUrl}/`,
+        downloadUrl: 'https://chromewebstore.google.com/detail/claude-nexus/mjlaeohblnaalakaflnchcmpoojjejka',
+        softwareVersion: '1.4.0',
+        author: {
+          '@type': 'Person',
+          name: 'Qiuner',
+        },
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+      }),
+    ],
+  ],
   lastUpdated: true,
   themeConfig: {
     search: {
@@ -44,7 +97,7 @@ export default defineConfig({
     zh: {
       label: '简体中文',
       lang: 'zh-CN',
-      title: 'claude-nexus',
+      title: siteTitle,
       description: 'Claude 缺失的增强套件。',
       link: '/zh/',
       themeConfig: {

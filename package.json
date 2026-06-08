@@ -1,11 +1,11 @@
 {
-  "name": "vite-web-extension",
+  "name": "claude-nexus",
   "version": "1.4.0",
-  "description": "A simple chrome & firefox extension template with Vite, React, TypeScript and Tailwind CSS.",
+  "description": "A browser extension for Claude with folder organization, timeline navigation, prompt library management, chat export, and bilingual UI.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JohnBra/vite-web-extension.git"
+    "url": "https://github.com/Qiuner/claude-nexus.git"
   },
   "scripts": {
     "build": "vite build --config vite.config.chrome.ts",
