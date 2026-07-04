@@ -55,7 +55,14 @@
     "hint": "Language changes apply to the current claude.ai tab."
   },
   "floatBall": {
+    "ballSize": "Ball size",
     "width": "Chat width"
+  },
+  "ballSizeControl": {
+    "title": "Ball size",
+    "valueLabel": "Size",
+    "closeAria": "Close floating ball size control",
+    "sliderAria": "Adjust floating ball size"
   },
   "usageRings": {
     "fiveHourWindow": "Current 5 hours",

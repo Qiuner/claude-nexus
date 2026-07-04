@@ -55,7 +55,14 @@
     "hint": "语言切换会应用到当前打开的 claude.ai 页面。"
   },
   "floatBall": {
+    "ballSize": "悬浮球大小",
     "width": "对话宽度"
+  },
+  "ballSizeControl": {
+    "title": "悬浮球大小",
+    "valueLabel": "大小",
+    "closeAria": "关闭悬浮球大小调整",
+    "sliderAria": "调整悬浮球大小"
   },
   "usageRings": {
     "fiveHourWindow": "当前 5 小时",

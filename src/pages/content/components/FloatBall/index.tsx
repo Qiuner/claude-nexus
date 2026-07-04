@@ -10,6 +10,7 @@ import { ArrowLeftRight, Settings, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { readStoredFloatBallPosition, writeStoredFloatBallPosition } from '@src/services/storage';
 import { useDraggable } from '../../hooks/useDraggable';
+import { useBallSizeControl } from '../../hooks/useBallSizeControl';
 import { useUsageRings } from '../../hooks/useUsageRings';
 import { panels } from './panelRegistry';
 import UsageRings from './UsageRings';
@@ -25,6 +26,7 @@ type PanelMenuProps = {
 
 const panelIcons: Record<string, LucideIcon> = {
   ArrowLeftRight,
+  Settings,
 };
 
 const PanelMenu = ({ side, onClose, onSelectPanel }: PanelMenuProps) => {
@@ -99,6 +101,7 @@ export default function FloatBall() {
   const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { usageData, refreshUsage } = useUsageRings();
+  const { ballScale } = useBallSizeControl();
   const [open, setOpen] = useState(false);
   const [activePanelId, setActivePanelId] = useState<string | null>(null);
   const [loadedPosition, setLoadedPosition] = useState<Point | null>(null);
@@ -192,8 +195,8 @@ export default function FloatBall() {
         ref={rootRef}
         className="relative"
         style={{
-          width: `${BALL_WRAPPER_SIZE_REM}rem`,
-          height: `${BALL_WRAPPER_SIZE_REM}rem`,
+          width: `${BALL_WRAPPER_SIZE_REM * ballScale}rem`,
+          height: `${BALL_WRAPPER_SIZE_REM * ballScale}rem`,
         }}
       >
         <UsageRings data={usageData} side={panelSide} isDragging={isDragging}>
@@ -201,8 +204,8 @@ export default function FloatBall() {
             type="button"
             className={`relative z-10 flex items-center justify-center active:scale-95 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{
-              width: `${BALL_BUTTON_SIZE_REM}rem`,
-              height: `${BALL_BUTTON_SIZE_REM}rem`,
+              width: `${BALL_BUTTON_SIZE_REM * ballScale}rem`,
+              height: `${BALL_BUTTON_SIZE_REM * ballScale}rem`,
               borderRadius: '50%',
               backgroundColor: hovered ? '#b5572f' : '#c96442',
               boxShadow: '0 0.25rem 0.75rem rgba(0,0,0,0.3)',
@@ -213,7 +216,11 @@ export default function FloatBall() {
             onMouseLeave={() => setHovered(false)}
             aria-label={t('widthControl.openAria')}
           >
-            <Settings className="pointer-events-none" style={{ width: '1.4rem', height: '1.4rem', color: '#ffffff' }} aria-hidden="true" />
+            <Settings
+              className="pointer-events-none"
+              style={{ width: `${1.4 * ballScale}rem`, height: `${1.4 * ballScale}rem`, color: '#ffffff' }}
+              aria-hidden="true"
+            />
           </button>
         </UsageRings>
 

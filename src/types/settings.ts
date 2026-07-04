@@ -5,4 +5,5 @@ export type FloatBallPosition = { x: number; y: number };
 export type Settings = {
   chatWidth: number;
   floatBallPosition: FloatBallPosition;
+  floatBallSize: number;
 };

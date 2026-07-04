@@ -8,6 +8,7 @@ import type { Prompt } from '@src/types/prompt';
 
 export const CHAT_WIDTH_STORAGE_KEY = 'chatWidth';
 export const FLOAT_BALL_POSITION_STORAGE_KEY = 'floatBallPosition';
+export const FLOAT_BALL_SIZE_STORAGE_KEY = 'floatBallSize';
 export const PROMPT_LIBRARY_STORAGE_KEY = 'promptLibrary';
 
 const parseChatWidth = (value: unknown): number | undefined => {
@@ -23,6 +24,11 @@ const parseFloatBallPosition = (value: unknown): FloatBallPosition | undefined =
   if (typeof v.x !== 'number' || Number.isNaN(v.x) || !Number.isFinite(v.x)) return undefined;
   if (typeof v.y !== 'number' || Number.isNaN(v.y) || !Number.isFinite(v.y)) return undefined;
   return { x: v.x, y: v.y };
+};
+
+const parseFloatBallSize = (value: unknown): number | undefined => {
+  if (typeof value !== 'number' || Number.isNaN(value) || !Number.isFinite(value)) return undefined;
+  return value;
 };
 
 const parsePrompt = (value: unknown): Prompt | undefined => {
@@ -116,6 +122,38 @@ export const writeStoredFloatBallPosition = async (position: FloatBallPosition):
     if (!chrome?.storage?.local) return;
     await new Promise<void>((resolve) => {
       chrome.storage.local.set({ [FLOAT_BALL_POSITION_STORAGE_KEY]: position }, () => resolve());
+    });
+  } catch {
+    return;
+  }
+};
+
+/**
+ * Reads the stored floating ball size scale.
+ * @returns Promise<number | undefined>
+ */
+export const readStoredFloatBallSize = async (): Promise<number | undefined> => {
+  try {
+    if (!chrome?.storage?.local) return undefined;
+    const result = await new Promise<Record<string, unknown>>((resolve) => {
+      chrome.storage.local.get([FLOAT_BALL_SIZE_STORAGE_KEY], (value) => resolve(value || {}));
+    });
+    return parseFloatBallSize(result[FLOAT_BALL_SIZE_STORAGE_KEY]);
+  } catch {
+    return undefined;
+  }
+};
+
+/**
+ * Persists the floating ball size scale.
+ * @param size number
+ * @returns Promise<void>
+ */
+export const writeStoredFloatBallSize = async (size: number): Promise<void> => {
+  try {
+    if (!chrome?.storage?.local) return;
+    await new Promise<void>((resolve) => {
+      chrome.storage.local.set({ [FLOAT_BALL_SIZE_STORAGE_KEY]: size }, () => resolve());
     });
   } catch {
     return;

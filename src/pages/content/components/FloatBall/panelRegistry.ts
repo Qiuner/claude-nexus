@@ -6,6 +6,7 @@
 
 import type { FC } from 'react';
 import WidthPanel from './panels/WidthPanel';
+import BallSizePanel from './panels/BallSizePanel';
 
 type FloatBallPanelComponentProps = {
   side: 'left' | 'right';
@@ -20,6 +21,12 @@ export type FloatBallPanel = {
 };
 
 export const panels: FloatBallPanel[] = [
+  {
+    id: 'ball-size',
+    icon: 'Settings',
+    labelKey: 'floatBall.ballSize',
+    component: BallSizePanel,
+  },
   {
     id: 'width',
     icon: 'ArrowLeftRight',
