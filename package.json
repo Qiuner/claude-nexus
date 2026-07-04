@@ -1,6 +1,6 @@
 {
   "name": "claude-nexus",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A browser extension for Claude with folder organization, timeline navigation, prompt library management, chat export, and bilingual UI.",
   "license": "MIT",
   "repository": {
