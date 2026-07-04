@@ -28,7 +28,7 @@
     "webextension-polyfill": "^0.12.0"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^2.4.0",
+    "@crxjs/vite-plugin": "^2.7.0",
     "@tailwindcss/vite": "^4.2.2",
     "@types/chrome": "^0.1.43",
     "@types/node": "^25.9.1",
@@ -50,7 +50,6 @@
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
     "vite": "^8.0.3",
-    "vite-tsconfig-paths": "^6.1.1",
     "vitepress": "^1.6.4"
   }
 }

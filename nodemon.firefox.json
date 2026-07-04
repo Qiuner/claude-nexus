@@ -11,6 +11,7 @@
     "manifest.dev.json"
   ],
   "ext": "tsx,css,html,ts,json",
+  "quiet": true,
   "ignore": [
     "src/**/*.spec.ts"
   ],
