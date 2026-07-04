@@ -11,7 +11,9 @@ import { useTranslation } from 'react-i18next';
 import { usePromptLibrary } from '../../hooks/usePromptLibrary';
 import type { Prompt } from '@src/types/prompt';
 import {
+  CHAT_INPUT_ACTION_ROW_SELECTOR,
   CHAT_INPUT_LEFT_ACTIONS_SELECTOR,
+  CHAT_INPUT_LEFT_ACTIONS_CURRENT_SELECTOR,
   CHAT_INPUT_SELECTOR,
   CHAT_INPUT_TOOLBAR_PARENT_SELECTOR,
   PROMPT_BUTTON_ROOT_ID,
@@ -34,19 +36,61 @@ const getChatInputElement = (): HTMLElement | null => {
   return el instanceof HTMLElement ? el : null;
 };
 
+const isVisibleElement = (el: HTMLElement | null): el is HTMLElement => {
+  if (!el) return false;
+  const rect = el.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0;
+};
+
+const pickButtonRowFallback = (root: HTMLElement): HTMLElement | null => {
+  const buttons = Array.from(root.querySelectorAll('button')).filter(
+    (node): node is HTMLButtonElement => node instanceof HTMLButtonElement && isVisibleElement(node),
+  );
+  if (buttons.length === 0) return null;
+
+  const plusButton = buttons.find((button) => {
+    const label = `${button.getAttribute('aria-label') ?? ''} ${button.textContent ?? ''}`.trim().toLowerCase();
+    return label.includes('attach') || label.includes('plus') || label.includes('add') || label.includes('上传') || label.includes('附件');
+  });
+
+  const anchor = plusButton ?? buttons[0];
+  const parent = anchor.parentElement;
+  return parent instanceof HTMLElement && isVisibleElement(parent) ? parent : null;
+};
+
 /**
  * Finds the left button container next to the chat input.
  * Uses relative positioning as claude.ai DOM is SPA-driven and classnames can shift.
  */
 const findLeftButtonsContainer = (): HTMLElement | null => {
-  const input = document.querySelector(CHAT_INPUT_SELECTOR);
-  if (!(input instanceof HTMLElement)) return null;
+  const input = getChatInputElement();
+  if (!input) return null;
+
+  const currentRow = input.closest(CHAT_INPUT_ACTION_ROW_SELECTOR);
+  if (currentRow instanceof HTMLElement) {
+    const currentLeftButtons = currentRow.querySelector(CHAT_INPUT_LEFT_ACTIONS_CURRENT_SELECTOR);
+    if (currentLeftButtons instanceof HTMLElement && isVisibleElement(currentLeftButtons)) return currentLeftButtons;
+  }
 
   const container = input.closest(CHAT_INPUT_TOOLBAR_PARENT_SELECTOR);
-  if (!container) return null;
+  if (container instanceof HTMLElement) {
+    const currentLeftButtons = container.querySelector(CHAT_INPUT_LEFT_ACTIONS_CURRENT_SELECTOR);
+    if (currentLeftButtons instanceof HTMLElement && isVisibleElement(currentLeftButtons)) return currentLeftButtons;
 
-  const leftButtons = container.querySelector(CHAT_INPUT_LEFT_ACTIONS_SELECTOR);
-  return leftButtons instanceof HTMLElement ? leftButtons : null;
+    const leftButtons = container.querySelector(CHAT_INPUT_LEFT_ACTIONS_SELECTOR);
+    if (leftButtons instanceof HTMLElement && isVisibleElement(leftButtons)) return leftButtons;
+
+    const fallbackRow = pickButtonRowFallback(container);
+    if (fallbackRow) return fallbackRow;
+  }
+
+  const form = input.closest('form');
+  if (form instanceof HTMLElement) {
+    const fallbackRow = pickButtonRowFallback(form);
+    if (fallbackRow) return fallbackRow;
+  }
+
+  return null;
 };
 
 const insertIntoChatInput = (promptContent: string): boolean => {
@@ -526,7 +570,12 @@ const mountIntoInputToolbar = (): boolean => {
 
   const host = document.createElement('div');
   host.id = PROMPT_BUTTON_ROOT_ID;
-  container.appendChild(host);
+  const firstChild = Array.from(container.children).find((node): node is HTMLElement => node instanceof HTMLElement);
+  if (firstChild) {
+    container.insertBefore(host, firstChild.nextSibling);
+  } else {
+    container.appendChild(host);
+  }
 
   createRoot(host).render(<PromptButton />);
   return true;
