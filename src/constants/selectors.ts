@@ -20,8 +20,8 @@ export const PROMPT_BUTTON_ROOT_SELECTOR = `#${PROMPT_BUTTON_ROOT_ID}`;
 
 // Main sidebar navigation container.
 export const SIDEBAR_NAV_SELECTOR = 'nav';
-// Conversation list container under sidebar navigation.
-export const SIDEBAR_CONVERSATION_LIST_SELECTOR = 'nav ul';
+// Conversation list scan root under sidebar navigation.
+export const SIDEBAR_CONVERSATION_LIST_SELECTOR = 'nav';
 // "Recents" section used as insertion anchor for folder manager container.
 export const SIDEBAR_RECENTS_SECTION_SELECTOR = 'nav div.flex-1.relative';
 // Fallback sidebar container when nav is not available.
@@ -34,8 +34,10 @@ export const SIDEBAR_WIDTH_TARGET_SELECTOR =
 export const CONVERSATION_LINK_SELECTOR = 'a[href^="/chat/"]';
 // List item wrapper for a single conversation entry.
 export const CONVERSATION_LIST_ITEM_SELECTOR = 'li';
-// Title text node inside conversation anchor.
-export const CONVERSATION_TITLE_SELECTOR = 'span.truncate';
+// Visible title text node inside conversation anchor.
+export const CONVERSATION_TITLE_SELECTOR = 'span.block.truncate, span.truncate';
+// Screen-reader title node inside conversation anchor.
+export const CONVERSATION_TITLE_SR_ONLY_SELECTOR = 'span.sr-only';
 
 // Chat input editable area.
 export const CHAT_INPUT_SELECTOR = 'div[data-testid="chat-input"]';

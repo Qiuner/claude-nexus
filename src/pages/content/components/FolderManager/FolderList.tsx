@@ -24,6 +24,7 @@ type Props = {
   folders: Folder[];
   theme: ThemeTokens;
   conversationIndex: Record<string, Conversation>;
+  conversationTitleIndex: Record<string, string>;
   editingFolderId: string | null;
   editingName: string;
   onEditingNameChange: (value: string) => void;
@@ -39,6 +40,7 @@ const FolderList = ({
   folders,
   theme,
   conversationIndex,
+  conversationTitleIndex,
   editingFolderId,
   editingName,
   onEditingNameChange,
@@ -57,6 +59,7 @@ const FolderList = ({
           folder={folder}
           theme={theme}
           conversationIndex={conversationIndex}
+          conversationTitleIndex={conversationTitleIndex}
           isEditing={editingFolderId === folder.id}
           editingName={editingName}
           onEditingNameChange={onEditingNameChange}

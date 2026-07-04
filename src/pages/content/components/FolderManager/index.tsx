@@ -85,7 +85,7 @@ export default function FolderManager() {
   } = useFolders();
   const handleConversationContextMenu = (payload: { x: number; y: number; conversationId: string }) => setContextMenu(payload);
 
-  const { portalContainer, conversationIndex, isDarkTheme } = useConversations({
+  const { portalContainer, conversationIndex, conversationTitleIndex, isDarkTheme } = useConversations({
     hiddenConversationIds: allConversationIdsInFolders,
     onConversationContextMenu: handleConversationContextMenu,
   });
@@ -199,6 +199,7 @@ export default function FolderManager() {
           folders={folders}
           theme={theme}
           conversationIndex={conversationIndex}
+          conversationTitleIndex={conversationTitleIndex}
           editingFolderId={editingFolderId}
           editingName={editingName}
           onEditingNameChange={setEditingName}

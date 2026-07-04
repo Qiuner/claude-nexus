@@ -6,7 +6,18 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { Conversation } from '@src/types/conversation';
-import { estimateIsDarkBackground, extractConversationIdFromHref, findNavUl, scanConversations } from '@pages/content/utils/dom';
+import {
+  estimateIsDarkBackground,
+  extractConversationIdFromHref,
+  findNavUl,
+  getConversationTitleFromAnchor,
+  scanConversations,
+} from '@pages/content/utils/dom';
+import {
+  CONVERSATION_TITLE_CACHE_KEY,
+  getConversationTitleCache,
+  saveConversationTitleCache,
+} from '@pages/content/services/storage';
 import {
   CONVERSATION_LINK_SELECTOR,
   CONVERSATION_LIST_ITEM_SELECTOR,
@@ -30,8 +41,8 @@ const restoreConversationListItem = (li: HTMLLIElement) => {
   delete li.dataset.claudeNexusPrevDisplay;
 };
 
-const applyConversationVisibility = (ul: HTMLUListElement, hiddenIds: Set<string>) => {
-  const anchors = Array.from(ul.querySelectorAll(CONVERSATION_LINK_SELECTOR));
+const applyConversationVisibility = (root: HTMLElement, hiddenIds: Set<string>) => {
+  const anchors = Array.from(root.querySelectorAll(CONVERSATION_LINK_SELECTOR));
   for (const a of anchors) {
     if (!(a instanceof HTMLAnchorElement)) continue;
     const href = a.getAttribute('href') || '';
@@ -51,16 +62,36 @@ type UseConversationsOptions = {
 
 export const useConversations = ({ hiddenConversationIds, onConversationContextMenu }: UseConversationsOptions) => {
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
-  const [navUlEl, setNavUlEl] = useState<HTMLUListElement | null>(null);
+  const [navUlEl, setNavUlEl] = useState<HTMLElement | null>(null);
 
-  const lastNavUlRef = useRef<HTMLUListElement | null>(null);
+  const lastNavUlRef = useRef<HTMLElement | null>(null);
   const hasPatchedHistoryRef = useRef(false);
   const [scanTick, setScanTick] = useState(0);
 
   const [conversationIndex, setConversationIndex] = useState<Record<string, Conversation>>({});
+  const [conversationTitleIndex, setConversationTitleIndex] = useState<Record<string, string>>({});
   const [isDarkTheme, setIsDarkTheme] = useState(true);
 
   const bumpScanTick = () => setScanTick((x) => x + 1);
+
+  useEffect(() => {
+    void (async () => {
+      const loaded = await getConversationTitleCache();
+      setConversationTitleIndex(loaded);
+    })();
+
+    const handleChanged: Parameters<typeof chrome.storage.onChanged.addListener>[0] = (changes, area) => {
+      if (area !== 'local') return;
+      if (!changes?.[CONVERSATION_TITLE_CACHE_KEY]) return;
+      void (async () => {
+        const next = await getConversationTitleCache();
+        setConversationTitleIndex(next);
+      })();
+    };
+
+    chrome?.storage?.onChanged?.addListener(handleChanged);
+    return () => chrome?.storage?.onChanged?.removeListener(handleChanged);
+  }, []);
 
   useEffect(() => {
     if (hasPatchedHistoryRef.current) return;
@@ -164,6 +195,27 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
       for (const c of conversations) nextIndex[c.id] = c;
       setConversationIndex(nextIndex);
 
+      const titleUpdates: Record<string, string> = {};
+      for (const c of conversations) {
+        const title = c.title.trim();
+        if (title) titleUpdates[c.id] = title;
+      }
+      if (Object.keys(titleUpdates).length > 0) {
+        setConversationTitleIndex((prev) => {
+          let changed = false;
+          const next = { ...prev };
+
+          for (const [id, title] of Object.entries(titleUpdates)) {
+            if (next[id] === title) continue;
+            next[id] = title;
+            changed = true;
+          }
+
+          if (changed) void saveConversationTitleCache(next);
+          return changed ? next : prev;
+        });
+      }
+
       const anchors = Array.from(ul.querySelectorAll(CONVERSATION_LINK_SELECTOR));
       for (const a of anchors) {
         if (!(a instanceof HTMLAnchorElement)) continue;
@@ -196,9 +248,20 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
       const href = a.getAttribute('href') || '';
       const id = extractConversationIdFromHref(href);
       if (!id) return;
+      const title = getConversationTitleFromAnchor(a).trim();
       e.dataTransfer?.setData('application/x-claude-nexus-conversation', id);
+      if (title) e.dataTransfer?.setData('application/x-claude-nexus-conversation-title', title);
       e.dataTransfer?.setData('text/plain', id);
       if (e.dataTransfer) e.dataTransfer.effectAllowed = 'move';
+
+      if (title) {
+        setConversationTitleIndex((prev) => {
+          if (prev[id] === title) return prev;
+          const next = { ...prev, [id]: title };
+          void saveConversationTitleCache(next);
+          return next;
+        });
+      }
     };
 
     const handleContextMenu = (e: MouseEvent) => {
@@ -227,6 +290,7 @@ export const useConversations = ({ hiddenConversationIds, onConversationContextM
     portalContainer,
     conversations,
     conversationIndex,
+    conversationTitleIndex,
     isDarkTheme,
   };
 };

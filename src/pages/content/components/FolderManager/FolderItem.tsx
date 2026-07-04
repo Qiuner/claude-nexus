@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronRight, Pencil, Trash2 } from 'lucide-react';
 import type { Conversation } from '@src/types/conversation';
 import type { Folder } from '@src/types/folder';
-import { getConversationIdFromDragEvent } from '../../utils/dom';
+import { getConversationIdFromDragEvent, getConversationTitleFromDragEvent } from '../../utils/dom';
+import { getConversationTitleCache, saveConversationTitleCache } from '../../services/storage';
 
 type ThemeTokens = {
   rootText: string;
@@ -27,6 +28,7 @@ type Props = {
   folder: Folder;
   theme: ThemeTokens;
   conversationIndex: Record<string, Conversation>;
+  conversationTitleIndex: Record<string, string>;
   isEditing: boolean;
   editingName: string;
   onEditingNameChange: (value: string) => void;
@@ -42,6 +44,7 @@ export default function FolderItem({
   folder,
   theme,
   conversationIndex,
+  conversationTitleIndex,
   isEditing,
   editingName,
   onEditingNameChange,
@@ -59,13 +62,24 @@ export default function FolderItem({
     e.preventDefault();
     const conversationId = getConversationIdFromDragEvent(e);
     if (!conversationId) return;
+    const title = getConversationTitleFromDragEvent(e)?.trim();
+    if (title) {
+      void (async () => {
+        const current = await getConversationTitleCache();
+        if (current[conversationId] === title) return;
+        await saveConversationTitleCache({ ...current, [conversationId]: title });
+      })();
+    }
     onDropConversationToFolder(folder.id, conversationId);
   };
 
   const renderConversationLink = (conversationId: string) => {
     const meta = conversationIndex[conversationId];
     const href = meta?.href || `/chat/${conversationId}`;
-    const title = meta?.title || t('conversation.fallbackTitle', { id: conversationId.slice(0, 8) });
+    const title =
+      meta?.title?.trim() ||
+      conversationTitleIndex[conversationId]?.trim() ||
+      t('conversation.fallbackTitle', { id: conversationId.slice(0, 8) });
 
     return (
       <a

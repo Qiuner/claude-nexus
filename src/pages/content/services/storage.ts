@@ -4,10 +4,13 @@
 
 import type { Folder } from '@src/types/folder';
 import { i18n } from '@src/services/i18n';
+import { extractConversationIdFromHref } from '../utils/dom';
 
 export const STORAGE_KEY = 'claude_nexus_folders';
+export const CONVERSATION_TITLE_CACHE_KEY = 'claude_nexus_conversation_titles';
 
 type StorageOpResult<T> = { ok: true; value: T | undefined } | { ok: false; error: string };
+export type ConversationTitleCache = Record<string, string>;
 
 const isDebugEnabled = () => {
   try {
@@ -34,6 +37,16 @@ const isContextInvalidatedError = (message: string | undefined) =>
 
 const sanitizeFolderName = (name: string) => name.trim().slice(0, 60);
 
+const normalizeConversationId = (value: unknown): string | null => {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const fromHref = extractConversationIdFromHref(trimmed);
+  if (fromHref) return fromHref;
+  if (trimmed.length >= 8 && !trimmed.includes('/')) return trimmed;
+  return null;
+};
+
 export const parseFoldersFromStorageValue = (value: unknown): Folder[] => {
   if (!value || typeof value !== 'object') return [];
 
@@ -48,7 +61,9 @@ export const parseFoldersFromStorageValue = (value: unknown): Folder[] => {
       if (!folder.name || typeof folder.name !== 'string') return null;
 
       const conversationIds = Array.isArray(folder.conversationIds)
-        ? folder.conversationIds.filter((id): id is string => typeof id === 'string' && id.length > 0)
+        ? folder.conversationIds
+            .map((id) => normalizeConversationId(id))
+            .filter((id): id is string => Boolean(id))
         : [];
 
       const dedupedConversationIds = Array.from(new Set(conversationIds));
@@ -141,4 +156,43 @@ export const saveFolders = async (folders: Folder[]): Promise<void> => {
   debugLog('storage.set committed', STORAGE_KEY, { folderCount: folders.length });
   const echoed = await storageLocalGet<unknown>(STORAGE_KEY);
   if (echoed.ok) debugLog('storage readback', STORAGE_KEY, echoed.value);
+};
+
+const normalizeConversationTitle = (value: unknown): string | null => {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed || null;
+};
+
+const parseConversationTitleCache = (value: unknown): ConversationTitleCache => {
+  if (!value || typeof value !== 'object') return {};
+
+  const entries = Object.entries(value as Record<string, unknown>)
+    .map(([id, title]) => {
+      const normalizedId = normalizeConversationId(id);
+      const normalizedTitle = normalizeConversationTitle(title);
+      if (!normalizedId || !normalizedTitle) return null;
+      return [normalizedId, normalizedTitle] as const;
+    })
+    .filter((entry): entry is readonly [string, string] => Boolean(entry));
+
+  return Object.fromEntries(entries);
+};
+
+export const getConversationTitleCache = async (): Promise<ConversationTitleCache> => {
+  if (!chrome?.storage?.local) return {};
+
+  const current = await storageLocalGet<unknown>(CONVERSATION_TITLE_CACHE_KEY);
+  if (current.ok && current.value !== undefined) return parseConversationTitleCache(current.value);
+  return {};
+};
+
+export const saveConversationTitleCache = async (cache: ConversationTitleCache): Promise<void> => {
+  if (!chrome?.storage?.local) return;
+
+  const sanitized = parseConversationTitleCache(cache);
+  const setRes = await storageLocalSet(CONVERSATION_TITLE_CACHE_KEY, sanitized);
+  if (!setRes.ok) return;
+
+  debugLog('storage.set committed', CONVERSATION_TITLE_CACHE_KEY, { titleCount: Object.keys(sanitized).length });
 };
